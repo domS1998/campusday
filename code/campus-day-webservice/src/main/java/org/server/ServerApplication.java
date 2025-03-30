@@ -12,11 +12,6 @@ public class ServerApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ServerApplication.class, args);
-		System.out.println(":::: Server Application ::::");
-
-		// Start Kafka
-		// KafkaConsumerThread kafkaConsumerThread = new KafkaConsumerThread("new_messages", "webservice", "kafka-service:9092");
-		// kafkaConsumerThread.start();
+		System.out.println(":::: Campus Day App Server Application ::::");
 	}
-
 }

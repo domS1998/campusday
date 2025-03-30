@@ -8,9 +8,8 @@ import org.server.api.JsonSerializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RegisterUserResponse extends JsonSerializable {
-    private boolean userExists;
-    private boolean userValid;
-    private boolean passwordValid;
+public class AddUserResponse extends JsonSerializable {
+    private boolean usernameExits;
+    private boolean cardIdExits;
     private boolean success;
 }

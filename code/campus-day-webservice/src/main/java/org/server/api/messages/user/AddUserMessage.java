@@ -7,7 +7,7 @@ import org.server.api.JsonSerializable;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterMessage extends JsonSerializable {
+public class AddUserMessage extends JsonSerializable {
     private String username;
-    private String password;
+    private String cardId;
 }
