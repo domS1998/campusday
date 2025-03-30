@@ -1,0 +1,16 @@
+CampusDayApp:
+	- vm name   : CampusDayApp
+	- username  : CampusDayApp
+	- password  : CampusDayApp123
+	- public ip : 20.218.141.158
+	- dns	    : 
+	    campusdayapp.germanywestcentral.cloudapp.azure.com
+    - ssh       : ssh -p 22 CampusDayApp@CampusDayApp
+    - filesystem: ssh://CampusDayApp:22@CampusDayApp
+    - scp       :
+        scp . CampusDayApp@campusdayapp.germanywestcentral.cloudapp.azure:/home/CampusDayApp/
+
+
+
+     
+	
