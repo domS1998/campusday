@@ -23,7 +23,7 @@ public class DeleteUserController extends AbstractController {
         // authorisiert, Benutzer löschen
         System.out.println("table["+ accessToken.getVal() +"] = " + clients.get(accessToken.getVal()) );
 
-        UserDAO user = new UserDAO(clients.get(accessToken.getVal()).getUsername());
+//        UserDAO user = new UserDAO(clients.get(accessToken.getVal()).getUsername());
 //        try {
 //            user.delete();
 //        }

@@ -6,7 +6,7 @@ import org.server.exceptions.*;
 
 public abstract class AbstractDAO extends JsonSerializable implements DAO {
 
-    public void insert() throws ChatWithUserException, DuplicateChatExeption, SaveObjectException, NoSuchUserException {
+    public void insert(){
         Session session = HibernateSession.getInstance().getSession();
         session.beginTransaction();
         session.save(this); // in diesem objekt speichern
@@ -16,8 +16,10 @@ public abstract class AbstractDAO extends JsonSerializable implements DAO {
 
     // neueres Speichern
     public void persist() {
+        if ( ! HibernateSession.getInstance().getSession().getTransaction().isActive()) {
+            HibernateSession.getInstance().getSession().beginTransaction();
+        }
         Session session = HibernateSession.getInstance().getSession();
-        session.beginTransaction();
         session.persist(this);
         session.getTransaction().commit();
     }
@@ -59,7 +61,7 @@ public abstract class AbstractDAO extends JsonSerializable implements DAO {
     }
 
     // für assozierte, noch nicht gespeicherte (transient) Objekte
-    public void update() throws NoSuchChatException {
+    public void update(){
         Session session = HibernateSession.getInstance().getSession();
         session.beginTransaction();
         session.update(this);
@@ -75,7 +77,7 @@ public abstract class AbstractDAO extends JsonSerializable implements DAO {
         session.getTransaction().commit();
     }
 
-    public void delete() throws NoSuchChatException {
+    public void delete(){
         Session session = HibernateSession.getInstance().getSession();
         session.beginTransaction();
         session.remove(this);
