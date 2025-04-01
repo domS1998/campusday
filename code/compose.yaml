@@ -48,7 +48,7 @@ services:
     restart:             unless-stopped
     networks:
       - campus_day_app
-    hostname:            datenbank
+    hostname:            database
     expose:
       # Containerport 5432 öffnen
       - 5432

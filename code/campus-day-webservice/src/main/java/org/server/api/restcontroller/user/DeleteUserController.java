@@ -19,24 +19,17 @@ public class DeleteUserController extends AbstractController {
 
         // Prüfen auf korrekte Kartennummer
         UserDAO userLoaded = UserDAO.findByRfid(cardId);
-        System.out.println("-------- 1 -------");
         if (userLoaded == null) {
             // Erfolglos falls Fehler
-            System.out.println("-------- 2 -------");
             return new DeleteUserResponse(false).toString();
         }
         try {
-            System.out.println("-------- 3 -------");
             userLoaded.getUserStations().clear();
-            System.out.println("-------- 4 -------");
             userLoaded.merge();
-            System.out.println("-------- 5 -------");
             userLoaded.delete();
-            System.out.println("-------- 6 -------");
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
-            System.out.println("-------- 7 -------");
         }
 
         return new DeleteUserResponse(true).toString();
