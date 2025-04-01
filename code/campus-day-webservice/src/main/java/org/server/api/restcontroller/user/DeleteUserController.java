@@ -19,41 +19,25 @@ public class DeleteUserController extends AbstractController {
 
         // Prüfen auf korrekte Kartennummer
         UserDAO userLoaded = UserDAO.findByRfid(cardId);
+        System.out.println("-------- 1 -------");
         if (userLoaded == null) {
             // Erfolglos falls Fehler
+            System.out.println("-------- 2 -------");
             return new DeleteUserResponse(false).toString();
         }
-//        try {
-//            userDAO.loadByRfid(cardId);
-//        }
-
-//        catch (Exception e) {
-//            e.printStackTrace();
-//            return new DeleteUserResponse(false).toString();
-//        }
-
-        // Ansonsten Benutzer löschen und Erfolgsnachrichte zurückgeben
-
-
-//        for (var userStation : userLoaded.getUserStations()) {
-//            userStation.setUser(null);
-//            userStation.getStation().getUserStations().remove(userStation);
-//            userLoaded.getUserStations().remove(userStation);
-//            userStation.setStation(null);
-//            userStation.delete();
-//        }
-//        Iterator<UserStationDAO> iterator = userLoaded.getUserStations().iterator();
-//        while (iterator.hasNext()) {
-//            UserStationDAO userStation = iterator.next();
-//            userStation.setUser(null);
-//            userStation.getStation().getUserStations().remove(userStation);
-//            iterator.remove();  // ✅ Safe removal
-//            userStation.setStation(null);
-//            userStation.delete();
-//        }
-        userLoaded.getUserStations().clear();
-        userLoaded.merge();
-        userLoaded.delete();
+        try {
+            System.out.println("-------- 3 -------");
+            userLoaded.getUserStations().clear();
+            System.out.println("-------- 4 -------");
+            userLoaded.merge();
+            System.out.println("-------- 5 -------");
+            userLoaded.delete();
+            System.out.println("-------- 6 -------");
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("-------- 7 -------");
+        }
 
         return new DeleteUserResponse(true).toString();
     }

@@ -52,15 +52,6 @@ public class AddStationController extends AbstractController {
         StationDAO stationDAO = new StationDAO();
         // find by name query
         StationDAO stationLoaded = StationDAO.findByName(message.getName());
-//        StationDAO stationLoaded = null;
-//        if ( !HibernateSession.getInstance().getSession().getTransaction().isActive() ) {
-//            HibernateSession.getInstance().getSession().beginTransaction();
-//        }
-//        Query<StationDAO> query = HibernateSession.getInstance().getSession().createNamedQuery(
-//                "Station.findByName", StationDAO.class
-//        );
-//        query.setParameter("name", message.getName());
-//        stationLoaded = query.uniqueResult();
 
         // Falls ein Ergebnis, ist Name schon vergeben
         if (stationLoaded != null) {
@@ -68,13 +59,7 @@ public class AddStationController extends AbstractController {
         }
 
         // Falls Nummer schon vergeben
-
-        // find by name query
-        Query<StationDAO>query = HibernateSession.getInstance().getSession().createNamedQuery(
-                "Station.findByNumber", StationDAO.class
-        );
-        query.setParameter("number", message.getNumber());
-        stationLoaded = query.uniqueResult();
+        stationLoaded = StationDAO.findByNumber(String.valueOf(message.getNumber()));
 
         // Falls ein Ergebnis, ist Name schon vergeben
         if (stationLoaded != null) {
