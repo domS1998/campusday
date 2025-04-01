@@ -2,8 +2,10 @@ package org.server.orm.classes;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.query.Query;
 import org.server.orm.AbstractDAO;
 import org.server.orm.HibernateSession;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 
 import java.util.*;
 
@@ -13,6 +15,10 @@ import java.util.*;
 @AllArgsConstructor
 @Table (name = "users")
 @Entity
+@NamedQuery(
+        name = "User.findByRfid",
+        query = "SELECT u FROM UserDAO u WHERE u.cardRfid = :rfid"
+)
 // Benutzer
 public class UserDAO extends AbstractDAO {
 
@@ -31,7 +37,7 @@ public class UserDAO extends AbstractDAO {
     private String cardRfid;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private Set<UserStationDao> userStations = new HashSet<>();
+    private Set<UserStationDAO> userStations = new HashSet<>();
 
     public UserDAO(String username, String cardRfid) {
         this.username = username;
@@ -39,8 +45,8 @@ public class UserDAO extends AbstractDAO {
     }
 
     // Station zu Benutzer hinzufügen
-    public void addSation(StationDAO station) {
-        UserStationDao userStation = new UserStationDao();
+    public void linkStation(StationDAO station) {
+        UserStationDAO userStation = new UserStationDAO();
         // user mit user_station und station verbinden
         this.getUserStations().add(userStation);
         userStation.setUser(this);
@@ -50,9 +56,9 @@ public class UserDAO extends AbstractDAO {
 
     public void removeStation(String stationName) {
 
-        UserStationDao userStationTarget = null;
+        UserStationDAO userStationTarget = null;
 
-        for (UserStationDao userStation : this.getUserStations()) {
+        for (UserStationDAO userStation : this.getUserStations()) {
             if (userStation.getStation().getName().equals(stationName)) {
                 userStationTarget = userStation;
             }
@@ -71,9 +77,9 @@ public class UserDAO extends AbstractDAO {
     }
 
     // alle Stationen aus einer Liste zu dem Benutzer hinzufügen
-    public void addSations(ArrayList<StationDAO> stationList) {
+    public void linkStations(ArrayList<StationDAO> stationList) {
         for (StationDAO station : stationList) {
-            this.addSation(station);
+            this.linkStation(station);
         }
     }
 
@@ -96,24 +102,27 @@ public class UserDAO extends AbstractDAO {
     }
 
     // Benutzer über rfid laden
-    public void loadByRfid(String rfid) {
-        if ( ! HibernateSession.getInstance().getSession().getTransaction().isActive()) {
-            HibernateSession.getInstance().getSession().beginTransaction();
+    public static UserDAO findByRfid(String rfid) {
+        UserDAO result = null;
+        try {
+            if ( !HibernateSession.getInstance().getSession().getTransaction().isActive() ) {
+                HibernateSession.getInstance().getSession().beginTransaction();
+            }
+            Query<UserDAO> query = HibernateSession.getInstance().getSession().createNamedQuery(
+                "User.findByRfid", UserDAO.class
+            );
+            query.setParameter("rfid", rfid);
+            result =  query.uniqueResult();
         }
-        TypedQuery<UserDAO> query = HibernateSession.getInstance().getSession().createQuery(
-                "SELECT u FROM UserDAO u WHERE u.cardRfid = :rfid", UserDAO.class);
-        query.setParameter("rfid", rfid);
-
-        UserDAO result =  query.getSingleResult(); // Returns the user with matching RFID
-        HibernateSession.getInstance().getSession().getTransaction().commit();
-        // in this einlesen
-        this.cardRfid = result.getCardRfid();
-        this.username = result.getUsername();
-        this.setUserStations(result.getUserStations());
+        catch (Exception e) {
+            System.out.println("Rolling back transaction due to: " + e.getMessage());
+            HibernateSession.getInstance().getSession().getTransaction().rollback();  // ✅ Ensure rollback is handled
+        }
+        return result;
     }
 
     public void checkStation(String stationName) {
-        for (UserStationDao userStation : this.getUserStations()) {
+        for (UserStationDAO userStation : this.getUserStations()) {
             if (userStation.getStation().getName().equals(stationName)) {
                 userStation.setCompleted(true);
             }
@@ -121,7 +130,7 @@ public class UserDAO extends AbstractDAO {
     }
 
     public void uncheckStation(String stationName) {
-        for (UserStationDao userStation : this.getUserStations()) {
+        for (UserStationDAO userStation : this.getUserStations()) {
             if (userStation.getStation().getName().equals(stationName)) {
                 userStation.setCompleted(false);
             }

@@ -2,40 +2,30 @@ package org.server.api.restcontroller.user;
 
 import org.server.api.messages.user.LoadUserResponse;
 import org.server.api.restcontroller.AbstractController;
-import org.server.api.restcontroller.AccessToken;
-import org.server.api.restcontroller.Client;
 import org.server.orm.classes.UserDAO;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class LoadUserController extends AbstractController {
 
-    @GetMapping("user")
-    String loadUser(@RequestHeader("Authorization") String authToken) {
+    @GetMapping("user/{cardId}")
+    String loadUser(@PathVariable String cardId) {
 
-        System.out.println(":::: LoadUserController: attempting to load user with token " + authToken);
+        System.out.println(":::: LoadUserController: attempting to load user with card id '" + cardId+"'");
 
-        AccessToken accessToken = new AccessToken(authToken);
-        if ( ! isAuthorized(accessToken)) {
-            return new LoadUserResponse(false, null).toString();
+        UserDAO userDAO = UserDAO.findByRfid(cardId);
+        if (userDAO == null) {
+            return new LoadUserResponse(null).toString();
         }
-
-        // authorisiert, Benutzerdaten aus DB laden
-        UserDAO user = new UserDAO();
-        Client client = clients.get(accessToken.getVal());
-        // Benutzer
-        user.load(client.getUsername());
 //        try {
-//            // Chats
-////            user.setChats(Chat.loadAll(client.getUsername()));
-//            // Nachrichten für jeden Chat laden
-////            for (Chat chat : user.getChats()) {
-////                chat.setMessages(Message.loadAll(client.getUsername(), chat.getOtherUser(client.getUsername())));
-////            }
+//            userDAO.loadByRfid(cardId);
 //        }
-//        catch (NoSuchChatException | ChatWithUserException | NoSuchUserException e) {
-//            System.out.println(":::: LoadUserController: " + e.getMessage());
+        // null falls nicht vorhanden
+//        catch (Exception e) {
+//            return new LoadUserResponse(null).toString();
 //        }
-        return new LoadUserResponse(true, user).toString();
+
+
+        return new LoadUserResponse(userDAO).toString();
     }
 }

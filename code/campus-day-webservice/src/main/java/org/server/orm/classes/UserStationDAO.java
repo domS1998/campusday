@@ -14,7 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Entity
 @Table(name = "user_station")
-public class UserStationDao extends AbstractDAO {
+public class UserStationDAO extends AbstractDAO {
 
     // generische ID
     @Id
@@ -24,12 +24,12 @@ public class UserStationDao extends AbstractDAO {
     // Referenz / Fremdschlüssel auf Benutzertabelle
     @JsonBackReference // Zeiger beim Serialisieren zu JSON nicht dereferenzieren
     @EqualsAndHashCode.Exclude
-    @ManyToOne/*(cascade = CascadeType.ALL)*/
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private UserDAO user;
 
     // Referenz / Fremdschlüssel auf Stationen
-    @ManyToOne/*(cascade = CascadeType.ALL)*/
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "station_id", nullable = false)
     private StationDAO station;
 

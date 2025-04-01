@@ -1,8 +1,6 @@
 package org.server.orm;
 
 import org.junit.jupiter.api.*;
-import org.server.exceptions.DuplicateUserException;import org.server.exceptions.NoSuchUserException;
-import org.server.exceptions.SaveObjectException;
 import org.server.orm.classes.LocationDAO;
 import org.server.orm.classes.StationDAO;
 import org.server.orm.classes.UserDAO;
@@ -77,7 +75,7 @@ public class UserORMTest {
         stationDAO.persist();
         stationDAO.load("station1");
 
-        userDAO.addSation(stationDAO);
+        userDAO.linkStation(stationDAO);
         userDAO.persist();
 
         System.out.println(userDAO);
@@ -113,7 +111,7 @@ public class UserORMTest {
         UserDAO userDAOLoaded = new UserDAO();
         userDAOLoaded.load(userDAO.getUsername());
 
-        userDAOLoaded.loadByRfid("0000-0000-0000-0000");
+        userDAOLoaded = UserDAO.findByRfid("0000-0000-0000-0000");
         System.out.println(userDAOLoaded);
 
         userDAO.delete();
@@ -160,10 +158,10 @@ public class UserORMTest {
         user2.setCardRfid(UUID.randomUUID().toString());
 
         // Stationen den Benutzern zuordnen
-        user1.addSation(station1);
-        user1.addSation(station2);
-        user2.addSation(station1);
-        user2.addSation(station2);
+        user1.linkStation(station1);
+        user1.linkStation(station2);
+        user2.linkStation(station1);
+        user2.linkStation(station2);
 
         // beide user drucken
         System.out.println(user1);
@@ -203,7 +201,7 @@ public class UserORMTest {
         stationDAO.persist();
 
         // Station verbinden
-        userDAO.addSation(stationDAO);
+        userDAO.linkStation(stationDAO);
 
         System.out.println(userDAO);
 

@@ -23,7 +23,7 @@
         <!-- Annotated entity classes -->
         <mapping class="org.server.orm.classes.UserDAO"/>
         <mapping class="org.server.orm.classes.StationDAO"/>
-        <mapping class="org.server.orm.classes.UserStationDao"/>
+        <mapping class="org.server.orm.classes.UserStationDAO"/>
 
     </session-factory>
 </hibernate-configuration>

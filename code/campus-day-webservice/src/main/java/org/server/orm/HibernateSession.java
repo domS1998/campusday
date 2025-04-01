@@ -21,11 +21,10 @@ public class HibernateSession {
     }
 
     private HibernateSession() {
-
         this.factory = new Configuration()
                 .configure("hibernate/hibernate.cfg.xml")
                 .buildSessionFactory();
-
     }
+
 
 }

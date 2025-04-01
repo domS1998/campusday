@@ -12,9 +12,7 @@ public abstract class AbstractDAO extends JsonSerializable implements DAO {
         }
         Session session = HibernateSession.getInstance().getSession();
         session.save(this); // in diesem objekt speichern
-        session.flush();
         session.getTransaction().commit();
-//        session.flush();
     }
 
     // neueres Speichern
@@ -25,7 +23,6 @@ public abstract class AbstractDAO extends JsonSerializable implements DAO {
         Session session = HibernateSession.getInstance().getSession();
         session.persist(this);
         session.getTransaction().commit();
-//        session.flush();
     }
 
     public void saveOrUpdate() {
@@ -35,7 +32,6 @@ public abstract class AbstractDAO extends JsonSerializable implements DAO {
         Session session = HibernateSession.getInstance().getSession();
         session.saveOrUpdate(this);
         session.getTransaction().commit();
-//        session.flush();
     }
 
     // lädt Objekt nicht direkt, kann lazy loading nutzten
@@ -48,7 +44,6 @@ public abstract class AbstractDAO extends JsonSerializable implements DAO {
         Session session = HibernateSession.getInstance().getSession();
         session.load(this, primaryKey); // in diesem objekt speichern
         session.getTransaction().commit();
-//        session.flush();
     }
 
     // Sucht Objekt direkt in DB
@@ -61,18 +56,16 @@ public abstract class AbstractDAO extends JsonSerializable implements DAO {
         Session session = HibernateSession.getInstance().getSession();
         Object result = session.get(obj_class.getClass(), primaryKey); // in diesem objekt speichern
         session.getTransaction().commit();
-//        session.flush();
         return result;
     }
 
-    public static Object find(Class obj_class, Object primaryKey) {
+    public static Object find(Class objClass, Object primaryKey) {
         if ( ! HibernateSession.getInstance().getSession().getTransaction().isActive()) {
             HibernateSession.getInstance().getSession().beginTransaction();
         }
         Session session = HibernateSession.getInstance().getSession();
-        Object result = session.find(obj_class.getClass(), primaryKey); // in diesem objekt speichern
+        Object result = session.find(objClass, primaryKey); // in diesem objekt speichern
         session.getTransaction().commit();
-//        session.flush();
         return result;
     }
 
@@ -83,9 +76,7 @@ public abstract class AbstractDAO extends JsonSerializable implements DAO {
         }
         Session session = HibernateSession.getInstance().getSession();
         session.update(this);
-        session.flush();
         session.getTransaction().commit();
-//        session.flush();
     }
 
     // für assozierte, bereits gepspeicherte Objekte zu updaten (persistente Objekte)
@@ -96,7 +87,6 @@ public abstract class AbstractDAO extends JsonSerializable implements DAO {
         Session session = HibernateSession.getInstance().getSession();
         session.merge(this);
         session.getTransaction().commit();
-//        session.flush();
     }
 
     public void delete(){
@@ -106,7 +96,6 @@ public abstract class AbstractDAO extends JsonSerializable implements DAO {
         Session session = HibernateSession.getInstance().getSession();
         session.remove(this);
         session.getTransaction().commit();
-//        session.flush();
     }
 }
 

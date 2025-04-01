@@ -8,8 +8,6 @@ import org.server.orm.classes.UserDAO;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class LoadUserResponse extends JsonSerializable {
-    private boolean authorized;
     private UserDAO user;
 }

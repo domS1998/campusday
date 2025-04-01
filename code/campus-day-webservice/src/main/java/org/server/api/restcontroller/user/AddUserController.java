@@ -3,8 +3,11 @@ package org.server.api.restcontroller.user;
 import org.server.api.messages.user.AddUserMessage;
 import org.server.api.messages.user.AddUserResponse;
 import org.server.api.restcontroller.AbstractController;
+import org.server.orm.classes.StationDAO;
 import org.server.orm.classes.UserDAO;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 
 @RestController
 public class AddUserController extends AbstractController {
@@ -26,36 +29,41 @@ public class AddUserController extends AbstractController {
         }
 
         // Falls Kartennummer schon einem Benutzer gehört
-        UserDAO userDAO = new UserDAO();
-        try {
-            userDAO.loadByRfid(jsonMessage.getCardId());
-        }
-        catch (Exception e) {}
-        if ( userDAO.getUsername() != null ) {
+        UserDAO userLoaded = UserDAO.findByRfid(jsonMessage.getCardId());
+        if (userLoaded != null) {
             return new AddUserResponse(false, true, false).toString();
         }
+//        try {
+//            userDAO.loadByRfid(jsonMessage.getCardId());
+//        }
+//        catch (Exception e) {}
+//        if ( userDAO.getUsername() != null ) {
+//            return new AddUserResponse(false, true, false).toString();
+//        }
 
-        System.out.println(userDAO);
 
-        System.out.println("..... 1");
+        System.out.println(userLoaded);
+
+        userLoaded = new UserDAO();
+
         // Falls Benutzername schon existiert
         try {
-            System.out.println(userDAO);
-            userDAO.load(jsonMessage.getUsername());
-            System.out.println(userDAO);
-            System.out.println("..... 2");
+            System.out.println(userLoaded);
+            userLoaded.load(jsonMessage.getUsername());
+            System.out.println(userLoaded);
             return new AddUserResponse(true, false, false).toString();
         }
         catch (Exception e) {
             e.printStackTrace();
-            System.out.println("..... 3");
         }
+        // ansonsten gültigen Benutzer speichern
+        userLoaded = new UserDAO(jsonMessage.getUsername(), jsonMessage.getCardId());
+        userLoaded.persist();
 
-        System.out.println("..... 5");
-
-        // ansonsten gültige Daten speichern
-        userDAO = new UserDAO(jsonMessage.getUsername(), jsonMessage.getCardId());
-        userDAO.persist();
+        // Benutzer mit allen vorhandenen Stationen verbinden
+        ArrayList<StationDAO> allStations = StationDAO.loadAll();
+        userLoaded.linkStations(allStations);
+        userLoaded.merge();
 
         // Antwortnachricht für Erfolg zurückgeben
         return new AddUserResponse(false, false, true).toString();

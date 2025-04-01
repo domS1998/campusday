@@ -1,9 +1,10 @@
-package org.server.api.restcontroller.user;
+package org.server.api.restcontroller.station;
 
 import org.junit.jupiter.api.*;
 import org.server.api.JsonSerializable;
 import org.server.api.messages.station.AddStationMessage;
 import org.server.api.messages.station.AddStationResponse;
+import org.server.api.messages.station.DeleteStationResponse;
 import org.server.api.messages.user.*;
 import org.server.orm.classes.LocationDAO;
 import org.server.orm.classes.StationDAO;
@@ -12,12 +13,11 @@ import org.springframework.boot.autoconfigure.security.SecurityProperties;
 
 import java.util.Random;
 
-import static org.server.util.RestApiCalls.sendGetRequest;
-import static org.server.util.RestApiCalls.sendPostRequest;
 import static org.server.RestApiTestConfig.*;
+import static org.server.util.RestApiCalls.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class LoadUserControllerTest {
+public class DeleteStationControllerTests {
 
     @BeforeAll
     static void setUp() {
@@ -83,16 +83,35 @@ public class LoadUserControllerTest {
 
     @Test
     @Order(1)
-    void testAddUserWithSuccess() {
+    void testDeleteStation() {
         try {
-            String url = "http://" + HOST_NAME + ":"+ PORT +"/api/user/0000-0000-0000-0001";
-            System.out.println("GET " + url);
-            String responseBodyStr = sendGetRequest(url, "");
+            String url = "http://" + HOST_NAME + ":"+ PORT +"/api/station/station-1";
+            System.out.println("DELETE " + url);
+            String responseBodyStr = sendDeleteRequest(url, "");
             System.out.println(responseBodyStr);
 
-            LoadUserResponse responseBody = (LoadUserResponse) JsonSerializable.deserialize(responseBodyStr, LoadUserResponse.class);
-            if ( responseBody == null ) {
-                Assertions.fail("adding user failed !");
+            DeleteStationResponse responseBody = (DeleteStationResponse) JsonSerializable.deserialize(responseBodyStr, DeleteStationResponse.class);
+            if ( ! responseBody.isDeleted() ) {
+                Assertions.fail("deleting station failed !");
+            }
+        }
+        catch (Exception e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    @Order(2)
+    void testDeleteAllStations() {
+        try {
+            String url = "http://" + HOST_NAME + ":"+ PORT +"/api/station/all";
+            System.out.println("DELETE " + url);
+            String responseBodyStr = sendDeleteRequest(url, "");
+            System.out.println(responseBodyStr);
+
+            DeleteUserResponse responseBody = (DeleteUserResponse) JsonSerializable.deserialize(responseBodyStr, DeleteUserResponse.class);
+            if ( ! responseBody.isDeleted() ) {
+                Assertions.fail("deleting user failed !");
             }
         }
         catch (Exception e) {

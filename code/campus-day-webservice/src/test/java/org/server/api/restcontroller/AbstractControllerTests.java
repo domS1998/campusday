@@ -1,23 +1,23 @@
-package org.server.api.restcontroller.user;
+package org.server.api.restcontroller;
 
 import org.junit.jupiter.api.*;
 import org.server.api.JsonSerializable;
 import org.server.api.messages.station.AddStationMessage;
 import org.server.api.messages.station.AddStationResponse;
-import org.server.api.messages.user.*;
+import org.server.api.messages.user.AddUserMessage;
+import org.server.api.messages.user.AddUserResponse;
+import org.server.api.messages.user.DeleteUserResponse;
 import org.server.orm.classes.LocationDAO;
-import org.server.orm.classes.StationDAO;
-import org.server.orm.classes.UserDAO;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 
 import java.util.Random;
 
-import static org.server.util.RestApiCalls.sendGetRequest;
-import static org.server.util.RestApiCalls.sendPostRequest;
-import static org.server.RestApiTestConfig.*;
+import static org.server.RestApiTestConfig.HOST_NAME;
+import static org.server.RestApiTestConfig.PORT;
+import static org.server.util.RestApiCalls.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class LoadUserControllerTest {
+
+public class AbstractControllerTests {
 
     @BeforeAll
     static void setUp() {
@@ -71,28 +71,26 @@ public class LoadUserControllerTest {
         catch (Exception e) {
             Assertions.fail(e.getMessage());
         }
-
     }
 
     @AfterAll
     static void cleanUp() {
         System.out.println("Cleanup after all tests.");
-        UserDAO.deleteAll();
-        StationDAO.deleteAll();
     }
 
     @Test
     @Order(1)
-    void testAddUserWithSuccess() {
+    void testResetAll() {
         try {
-            String url = "http://" + HOST_NAME + ":"+ PORT +"/api/user/0000-0000-0000-0001";
-            System.out.println("GET " + url);
-            String responseBodyStr = sendGetRequest(url, "");
+            String url = "http://" + HOST_NAME + ":"+ PORT +"/api/resetAll";
+            System.out.println("DELETE " + url);
+
+            String responseBodyStr = sendDeleteRequest(url,"");
             System.out.println(responseBodyStr);
 
-            LoadUserResponse responseBody = (LoadUserResponse) JsonSerializable.deserialize(responseBodyStr, LoadUserResponse.class);
-            if ( responseBody == null ) {
-                Assertions.fail("adding user failed !");
+            DeleteUserResponse responseBody = (DeleteUserResponse) JsonSerializable.deserialize(responseBodyStr, DeleteUserResponse.class);
+            if ( ! responseBody.isDeleted() ) {
+                Assertions.fail("resetting system failed!");
             }
         }
         catch (Exception e) {

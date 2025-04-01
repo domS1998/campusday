@@ -3,10 +3,9 @@ package org.server.orm.classes;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.query.Query;
 import org.server.orm.AbstractDAO;
 import org.server.orm.HibernateSession;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,6 +16,14 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table (name = "station")
+@NamedQuery(
+        name = "Station.findByName",
+        query = "SELECT S FROM StationDAO S WHERE S.name = :name"
+)
+@NamedQuery(
+        name = "Station.findByNumber",
+        query = "SELECT S FROM StationDAO S WHERE S.number = :number"
+)
 @Entity
 // Verbindungsobjekt für die Join Tabellen bei n:m Beziehungen;
 //  wird explizit als 2x 1:n implementiert, da bei n:m
@@ -44,8 +51,8 @@ public class StationDAO extends AbstractDAO {
     // Referenz auf Verbindungsobjekte zu Benutzern
     @JsonBackReference
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "station", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private Set<UserStationDao> userStations = new HashSet<>();
+    @OneToMany(mappedBy = "station", /*cascade = CascadeType.ALL, */orphanRemoval = true, fetch = FetchType.EAGER)
+    private Set<UserStationDAO> userStations = new HashSet<>();
 
     public StationDAO (String name, int number, LocationDAO location) {
         this.name = name;
@@ -80,5 +87,45 @@ public class StationDAO extends AbstractDAO {
     // Standort einer Station zuordnen
     public void setLocation(LocationDAO.FloorPlanImage floorPlanImageNum, int xCoordinate, int yCoordinate){
         this.location = new LocationDAO(floorPlanImageNum, xCoordinate, yCoordinate);
+    }
+
+    // Station über Namen laden
+    public static StationDAO findByName(String stationName){
+        StationDAO result = null;
+        try {
+            if ( !HibernateSession.getInstance().getSession().getTransaction().isActive() ) {
+                HibernateSession.getInstance().getSession().beginTransaction();
+            }
+            Query<StationDAO> query = HibernateSession.getInstance().getSession().createNamedQuery(
+                "Station.findByName", StationDAO.class
+            );
+            query.setParameter("name", stationName);
+            result = query.uniqueResult();
+        }
+        catch (Exception e) {
+            System.out.println("Rolling back transaction due to: " + e.getMessage());
+            HibernateSession.getInstance().getSession().getTransaction().rollback();  // ✅ Ensure rollback is handled
+        }
+        return result;
+    }
+
+    // Station über Namen laden
+    public static StationDAO findByNumber(String stationNumber){
+        StationDAO result = null;
+        try {
+            if ( !HibernateSession.getInstance().getSession().getTransaction().isActive() ) {
+                HibernateSession.getInstance().getSession().beginTransaction();
+            }
+            Query<StationDAO> query = HibernateSession.getInstance().getSession().createNamedQuery(
+                "Station.findByNumber", StationDAO.class
+            );
+            query.setParameter("number", stationNumber);
+            result = query.uniqueResult();
+        }
+        catch (Exception e) {
+            System.out.println("Rolling back transaction due to: " + e.getMessage());
+            HibernateSession.getInstance().getSession().getTransaction().rollback();  // ✅ Ensure rollback is handled
+        }
+        return result;
     }
 }
