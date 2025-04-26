@@ -1,0 +1,12 @@
+.full-width-quarter-height {
+  width: 100%;             /* Fill all available horizontal space */
+  height: 10vh;            /* 25% of the viewport height */
+  background-color: #0071BC;  /* Pick any background color */
+  display: flex;
+  justify-content: flex-end; /* Push child to the right */
+}
+
+.icon-image {
+  width: 20%;
+  margin-right: 2%;
+}

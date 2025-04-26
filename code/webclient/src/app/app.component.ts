@@ -5,6 +5,8 @@ import {UserModel} from '../models/user.model';
 import {StationDisplayBarComponent} from './station-display-bar/station-display-bar.component';
 import {ImageBarComponent} from './image-bar/image-bar.component';
 import {HttpClient} from '@angular/common/http';
+import {HeaderComponent} from './header/header.component';
+import {FooterComponent} from './footer/footer.component';
 
 @Component({
   standalone: true,
@@ -15,6 +17,9 @@ import {HttpClient} from '@angular/common/http';
     RouterOutlet,
     StationDisplayBarComponent,
     ImageBarComponent,
+    HeaderComponent,
+    FooterComponent,
+    // HeaderComponent,
   ],
   providers: [
     GetUserDataService]

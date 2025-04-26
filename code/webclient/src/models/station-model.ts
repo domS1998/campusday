@@ -11,7 +11,7 @@ export interface Location {
 }
 
 export enum FloorPlanImage {
-  G20,
-  G21,
-  G22,
+  G20 = "G20",
+  G21 = "G21",
+  G22 = "G22",
 }

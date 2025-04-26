@@ -1,6 +1,32 @@
-<div class="main" *ngFor="let label of this.floorLabels">
-  {{label}}
+<div class="main" *ngFor="let item of this.combinedList">
+<!--  {{item.label}}-->
   <div class="image-container">
-    <img src="G2-EG.png" alt="{{label}}">
+    <div class="image-label">
+      {{item.label}}
+    </div>
+      <img [src]="item.imageName" [alt]="item.label">
+
+
+
+    <!-- Wenn Benuzterdaten fertig geladen sind-->
+    <div *ngIf="this.isLoaded">
+    <!-- Für alle Stationen ein rundes Div auf den Bildern plazieren -->
+      <div *ngFor="let userStation of this.userStations"
+           [style.--offset-x]="this.calculateCoordinates(userStation).xOffset + 'px'"
+           [style.--offset-y]="this.calculateCoordinates(userStation).yOffset + 'px'"
+      >
+        <!-- Kreis mit Haken, falls schon abgehakt -->
+        <div *ngIf="userStation?.completed, else incomplete" class="circle-ticked">✓<!-- Circle placed on top --></div>
+
+        <!-- ansonsten roter Kreis mit Stationsnummer -->
+        <ng-template #incomplete>
+            <div class="circle-unticked">{{userStation.station.number}}<!--✓--></div> <!-- Circle placed on top -->
+        </ng-template>
+
+
+      </div>
+    </div>
+
+
   </div>
 </div>

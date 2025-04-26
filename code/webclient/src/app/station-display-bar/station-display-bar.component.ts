@@ -7,6 +7,7 @@ import {StationModel} from '../../models/station-model';
 import {UserStationModel} from '../../models/user-station-model';
 import {delay} from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
+import {FooterComponent} from '../footer/footer.component';
 
 @Component({
   standalone: true,
@@ -39,18 +40,18 @@ export class StationDisplayBarComponent {
         this.user = user;
         this.userStations = this.user.userStations
 
-        console.log("userStations before sorting: \n")
-        this.userStations.forEach((userStation: UserStationModel) => {
-          console.log(userStation.station.number + "\n");
-        })
+        // console.log("userStations before sorting: \n")
+        // this.userStations.forEach((userStation: UserStationModel) => {
+          // console.log(userStation.station.number + "\n");
+        // })
 
         // Stationen sortieren vor Anzeige
         this.sortStationsByNumber()
 
-        console.log("userStations after sorting: \n")
-        this.userStations.forEach((userStation: UserStationModel) => {
-          console.log(userStation.station.number + "\n");
-        })
+        // console.log("userStations after sorting: \n")
+        // this.userStations.forEach((userStation: UserStationModel) => {
+        //   console.log(userStation.station.number + "\n");
+        // })
 
         // delay(3000)
         this.isLoaded = true;
