@@ -1,0 +1,13 @@
+.main {
+  /*background-color: red;*/
+  min-width: 90%;  /* Optional: Set width */
+  min-height: 30.2vh;
+  margin: 10px 10px 10px 10px;
+  /*border: 1px solid #333;*/
+  text-align: center;
+}
+
+.image-container img {
+  width: 100%;
+  height: auto; /* Keeps aspect ratio */
+}

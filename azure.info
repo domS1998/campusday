@@ -5,8 +5,8 @@ CampusDayApp:
 	- public ip : 20.218.141.158
 	- dns	    : 
 	    campusdayapp.germanywestcentral.cloudapp.azure.com
-    - ssh       : ssh -p 22 CampusDayApp@CampusDayApp
-    - filesystem: ssh://CampusDayApp:22@CampusDayApp
+    - ssh       : ssh -p 22 CampusDayApp@campusdayapp.germanywestcentral.cloudapp.azure.com
+    - filesystem: ssh://CampusDayApp:22@campusdayapp.germanywestcentral.cloudapp.azure.com
     - scp       :
         scp . CampusDayApp@campusdayapp.germanywestcentral.cloudapp.azure:/home/CampusDayApp/
 

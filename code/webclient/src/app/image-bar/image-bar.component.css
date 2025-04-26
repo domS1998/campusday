@@ -1,0 +1,9 @@
+.image-bar-container {
+  flex: 1;
+  box-sizing: border-box;
+  width: 70vw;
+  min-height: 100%;
+  overflow: hidden; /* Prevents margin collapse */
+  /*background-color: #333333;*/
+}
+

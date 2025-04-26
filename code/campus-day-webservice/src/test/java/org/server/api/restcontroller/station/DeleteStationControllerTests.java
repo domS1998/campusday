@@ -9,7 +9,6 @@ import org.server.api.messages.user.*;
 import org.server.orm.classes.LocationDAO;
 import org.server.orm.classes.StationDAO;
 import org.server.orm.classes.UserDAO;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 
 import java.util.Random;
 

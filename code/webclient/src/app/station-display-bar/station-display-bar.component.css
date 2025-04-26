@@ -1,0 +1,132 @@
+.station-display-container {
+  flex: 1;
+  /*background-color: cornflowerblue;*/
+  width: calc(30vw);
+  height: 100%;
+}
+
+h1 {
+  text-align: center;
+}
+
+.station-name-container {
+  margin-left: 10%;
+  margin-top: 5%;
+}
+
+/*.check-mark {*/
+/*  font-size: 20px;*/
+/*  padding: 10px;*/
+/*  color: green;  !* Green text *!*/
+/*  display: inline-flex;*/
+/*  align-items: center;*/
+/*  justify-content: center;*/
+/*  position: relative;*/
+/*}*/
+
+/*.check-mark::before {*/
+/*  content: '\2713'; !* Unicode character for a check mark (✔) *!*/
+/*  font-size: 30px;*/
+/*  color: green;  !* Green color for the check mark *!*/
+/*  margin-right: 8px; !* Space between the check mark and text *!*/
+/*}*/
+
+
+
+
+
+
+
+/*.check-mark-with-circle {*/
+/*  font-size: 20px;*/
+/*  padding: 10px;*/
+/*  !*color: green;  !* Green text *!*!*/
+/*  display: inline-flex;*/
+/*  align-items: center;*/
+/*  justify-content: center;*/
+/*  position: relative;*/
+/*}*/
+
+/*.check-mark-with-circle::before {*/
+/*  content: '';  !* Empty content for the circle *!*/
+/*  width: 20px;*/
+/*  height: 20px;*/
+/*  border: 2px solid black;  !* Green border for the circle *!*/
+/*  border-radius: 50%;  !* Make it circular *!*/
+/*  margin-right: 8px; !* Space between the circle and text *!*/
+/*  display: inline-block;*/
+
+/*}*/
+
+/*.check-mark-with-circle.completed::before {*/
+/*  content: '\2713';  !* Unicode character for a check mark (✔) *!*/
+
+/*  !*font-size: 16px;  !* Make the checkmark smaller to fit inside the circle *!*!*/
+/*  font-size: 50px;  !* Make the checkmark smaller to fit inside the circle *!*/
+/*  !*font-weight: 700; !* Make font thicker*!*!*/
+
+/*  color: green;  !* Green color for the check mark *!*/
+/*  text-align: center;*/
+/*  line-height: 20px; !* Align the check mark in the middle of the circle *!*/
+
+/*  position: relative; !* Position the check mark outside the circle *!*/
+/*  top: -4px;  !* Move the check mark slightly above the circle *!*/
+/*  left: 3px;  !* Move the check mark slightly to the right *!*/
+/*}*/
+
+
+
+/* put green tick circle infront of text in div + color text green */
+
+.checkmark-with-text {
+  display: flex;
+  align-items: center;  /* Vertically align the text and circle */
+  margin-top: 1%;
+  font-size: 25px;
+  font-weight: 700;
+  color: green;
+
+}
+
+.checkmark-circle {
+  width: 25px;                 /* Circle width */
+  height: 25px;                /* Circle height */
+  background-color: green;     /* Green background */
+  border-radius: 50%;          /* Make it circular */
+  display: flex;               /* Flexbox to center the checkmark */
+  align-items: center;         /* Vertically center the checkmark */
+  justify-content: center;     /* Horizontally center the checkmark */
+  font-size: 20px;             /* Size of the checkmark */
+  color: white;                /* White color for the checkmark */
+  margin-right: 10px;          /* Space between the circle and the text */
+}
+
+.checkmark-circle::before {
+  content: '\2713';             /* Unicode character for a check mark (✔) */
+}
+
+
+
+/* place empty black circle infront of text in div */
+
+.empty-circle-with-text {
+  display: flex;
+  align-items: center;  /* Vertically align the text and circle */
+  margin-top: 1%;
+  font-size: 25px;
+}
+
+.empty-circle {
+  width: 25px;                 /* Circle width */
+  height: 25px;                /* Circle height */
+  border: 2.5px solid black;     /* Black border for the empty circle */
+  border-radius: 50%;          /* Make it circular */
+  display: flex;               /* Flexbox to center the circle */
+  align-items: center;         /* Vertically center the content inside the circle */
+  justify-content: center;     /* Horizontally center the content inside the circle */
+  margin-right: 10px;          /* Space between the circle and the text */
+}
+
+.empty-circle::before {
+  content: '';                  /* No checkmark, just an empty circle */
+}

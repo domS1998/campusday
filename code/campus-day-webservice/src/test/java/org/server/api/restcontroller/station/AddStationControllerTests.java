@@ -31,8 +31,8 @@ public class AddStationControllerTests {
         // Alle erstelleten Objekte aus der DB löschen
 //        StationDAO station = (StationDAO) AbstractDAO.find(StationDAO.class, "station-1");
 //        station.delete();
-        StationDAO.deleteAll();
-        UserDAO.deleteAll();
+      //  StationDAO.deleteAll();
+       // UserDAO.deleteAll();
     }
 
     @Test
