@@ -1,0 +1,38 @@
+app-input-dialog {
+  border-radius: 5% !important;
+}
+
+h2 {
+  text-align: center;
+  padding-top: 20px;
+  color: #4F5054;
+}
+
+label {
+  font-weight: bold;
+  font-size: 13px;
+  font-family: "Arial", sans-serif;
+}
+
+input {
+  width: 100%;
+}
+
+button {
+  padding: 3%;
+  margin-right: 2%;
+  background-color: #0071BC;
+  color: white;
+  font-weight: bold;
+  font-size: 13px;
+  font-family: "Arial", sans-serif;
+  border: none;
+  border-radius: 20px;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+}
+button:hover {
+  /*background-color: white;*/
+  /*color: #0071BC;*/
+  background-color: #004080;
+  color: white;
+}

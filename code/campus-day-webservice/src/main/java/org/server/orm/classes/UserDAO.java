@@ -2,10 +2,11 @@ package org.server.orm.classes;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.server.orm.AbstractDAO;
-import org.server.orm.HibernateSession;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.server.orm.HibernateApi;
 
 import java.util.*;
 
@@ -18,6 +19,14 @@ import java.util.*;
 @NamedQuery(
         name = "User.findByRfid",
         query = "SELECT u FROM UserDAO u WHERE u.cardRfid = :rfid"
+)
+@NamedQuery(
+        name = "User.findAll",
+        query =
+            """
+            SELECT DISTINCT u FROM UserDAO u 
+            LEFT JOIN FETCH u.userStations
+            """
 )
 // Benutzer
 public class UserDAO extends AbstractDAO {
@@ -85,11 +94,33 @@ public class UserDAO extends AbstractDAO {
 
     // alle vorhandenen Benutzer laden
     public static ArrayList<UserDAO> loadAll() {
-        if ( ! HibernateSession.getInstance().getSession().getTransaction().isActive()) {
-            HibernateSession.getInstance().getSession().beginTransaction();
+
+        Session session = HibernateApi.getInstance().getSession();
+
+        if (session == null || !session.isOpen()) {
+            session = HibernateApi.getInstance().factory.openSession(); // implement this
         }
-        List<UserDAO> users = HibernateSession.getInstance().getSession().createQuery("FROM UserDAO", UserDAO.class).list();
-        HibernateSession.getInstance().getSession().getTransaction().commit();
+
+        Transaction tx = session.getTransaction();
+        if (tx == null || !tx.isActive()) {
+            tx = session.beginTransaction();
+        }
+        
+//        List<UserDAO> users = session.createQuery("FROM UserDAO", UserDAO.class).list();
+
+        List<UserDAO> users = session.createNamedQuery("User.findAll", UserDAO.class).list();
+
+        tx.commit();
+
+//        System.out.println(users);
+
+//        for (UserDAO user : users) {
+//            user.load(user.getUsername());
+//            System.out.println(user);
+//        }
+
+//        session.close();
+
         return new ArrayList<>(users);
     }
 
@@ -103,20 +134,33 @@ public class UserDAO extends AbstractDAO {
 
     // Benutzer über rfid laden
     public static UserDAO findByRfid(String rfid) {
-        UserDAO result = null;
+        UserDAO result  = null;
+        Session session = null;
+        Transaction tx  = null;
         try {
-            if ( !HibernateSession.getInstance().getSession().getTransaction().isActive() ) {
-                HibernateSession.getInstance().getSession().beginTransaction();
+            session = HibernateApi.getInstance().getSession();
+            if (session == null || !session.isOpen()) {
+                session = HibernateApi.getInstance().factory.openSession(); // implement this
             }
-            Query<UserDAO> query = HibernateSession.getInstance().getSession().createNamedQuery(
+
+            tx = session.getTransaction();
+            if (tx == null || !tx.isActive()) {
+                tx = session.beginTransaction();
+            }
+
+            Query<UserDAO> query = session.createNamedQuery(
                 "User.findByRfid", UserDAO.class
             );
             query.setParameter("rfid", rfid);
             result =  query.uniqueResult();
+
+            tx.commit();
+//            session.close();
         }
         catch (Exception e) {
             System.out.println("Rolling back transaction due to: " + e.getMessage());
-            HibernateSession.getInstance().getSession().getTransaction().rollback();  // ✅ Ensure rollback is handled
+            assert tx != null;
+            tx.rollback();  // ✅ Ensure rollback is handled
         }
         return result;
     }

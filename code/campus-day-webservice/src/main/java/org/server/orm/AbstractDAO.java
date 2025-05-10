@@ -1,46 +1,66 @@
 package org.server.orm;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.server.api.JsonSerializable;
-import org.server.exceptions.*;
+import org.server.orm.classes.UserDAO;
 
 public abstract class AbstractDAO extends JsonSerializable implements DAO {
 
     public void insert(){
-        if ( ! HibernateSession.getInstance().getSession().getTransaction().isActive()) {
-            HibernateSession.getInstance().getSession().beginTransaction();
+        Session session = HibernateApi.getInstance().getSession();
+
+        if (session == null || !session.isOpen()) {
+            session = HibernateApi.getInstance().factory.openSession(); // implement this
         }
-        Session session = HibernateSession.getInstance().getSession();
-        HibernateSession.getInstance().getSession().clear();
+        Transaction tx = session.getTransaction();
+        if (tx == null || !tx.isActive()) {
+            tx = session.beginTransaction();
+        }
+
         session.save(this); // in diesem objekt speichern
-        session.getTransaction().commit();
+
+        tx.commit();
+//        session.close();
     }
 
     // neueres Speichern
     public void persist() {
-//        try {
-            if (!HibernateSession.getInstance().getSession().getTransaction().isActive()) {
-                HibernateSession.getInstance().getSession().beginTransaction();
-            }
-            Session session = HibernateSession.getInstance().getSession();
-            HibernateSession.getInstance().getSession().clear();
-            session.persist(this);
-            session.getTransaction().commit();
-//        }
-//        catch (Exception e) {
-//            System.out.println("Rolling back transaction due to: " + e.getMessage());
-//            HibernateSession.getInstance().getSession().getTransaction().rollback();  // ✅ Ensure rollback is handled
-//        }
+        Session session = HibernateApi.getInstance().getSession();
+
+        if (session == null || !session.isOpen()) {
+            session = HibernateApi.getInstance().factory.openSession(); // implement this
+        }
+
+        Transaction tx = session.getTransaction();
+        if (tx == null || !tx.isActive()) {
+            tx = session.beginTransaction();
+        }
+
+        session.persist(this);
+
+        tx.commit();
+//        session.close();
     }
 
     public void saveOrUpdate() {
-        if ( ! HibernateSession.getInstance().getSession().getTransaction().isActive()) {
-            HibernateSession.getInstance().getSession().beginTransaction();
+
+        Session session = HibernateApi.getInstance().getSession();
+
+        if (session == null || !session.isOpen()) {
+            session = HibernateApi.getInstance().factory.openSession(); // implement this
         }
-        Session session = HibernateSession.getInstance().getSession();
-        HibernateSession.getInstance().getSession().clear();
+
+        Transaction tx = session.getTransaction();
+        if (tx == null || !tx.isActive()) {
+            tx = session.beginTransaction();
+        }
+
         session.saveOrUpdate(this);
-        session.getTransaction().commit();
+
+        tx.commit();
+//        session.close();
     }
 
     // lädt Objekt nicht direkt, kann lazy loading nutzten
@@ -48,17 +68,27 @@ public abstract class AbstractDAO extends JsonSerializable implements DAO {
     //  sinnvoll, wenn Objekt garantiert in DB
     public void load(Object primaryKey) {
 //        try {
-            if ( ! HibernateSession.getInstance().getSession().getTransaction().isActive()) {
-                HibernateSession.getInstance().getSession().beginTransaction();
-            }
-            Session session = HibernateSession.getInstance().getSession();
-        HibernateSession.getInstance().getSession().clear();
+
+        Session session = HibernateApi.getInstance().getSession();
+
+        if (session == null || !session.isOpen()) {
+            session = HibernateApi.getInstance().factory.openSession(); // implement this
+        }
+
+        Transaction tx = session.getTransaction();
+        if (tx == null || !tx.isActive()) {
+            tx = session.beginTransaction();
+        }
+
         session.load(this, primaryKey); // in diesem objekt speichern
-            session.getTransaction().commit();
+        tx.commit();
+
+//        session.close();
+
 //        }
 //        catch (Exception e) {
 //            System.out.println("Rolling back transaction due to: " + e.getMessage());
-//            HibernateSession.getInstance().getSession().getTransaction().rollback();  // ✅ Ensure rollback is handled
+//            tx.rollback();  // ✅ Ensure rollback is handled
 //        }
     }
 
@@ -66,69 +96,114 @@ public abstract class AbstractDAO extends JsonSerializable implements DAO {
     //  null, falls Objekt nicht gefunden, kein Fehler
     //  sinvoll, falls nicht sicher, ob Objekt in DB
     public static Object get(Class obj_class, Object primaryKey) {
-        if ( ! HibernateSession.getInstance().getSession().getTransaction().isActive()) {
-            HibernateSession.getInstance().getSession().beginTransaction();
+        Session session = HibernateApi.getInstance().getSession();
+
+        if (session == null || !session.isOpen()) {
+            session = HibernateApi.getInstance().factory.openSession(); // implement this
         }
-        Session session = HibernateSession.getInstance().getSession();
-        HibernateSession.getInstance().getSession().clear();
+
+        Transaction tx = session.getTransaction();
+        if (tx == null || !tx.isActive()) {
+            tx = session.beginTransaction();
+        }
+
         Object result = session.get(obj_class.getClass(), primaryKey); // in diesem objekt speichern
-        session.getTransaction().commit();
+
+        tx.commit();
+//        session.close();
+
         return result;
     }
 
     // Objekt in Cache / Persistence Context suchen anstatt aus der DB laden
     public static Object find(Class objClass, Object primaryKey) {
-        if ( ! HibernateSession.getInstance().getSession().getTransaction().isActive()) {
-            HibernateSession.getInstance().getSession().beginTransaction();
+        Session session = HibernateApi.getInstance().getSession();
+
+        if (session == null || !session.isOpen()) {
+            session = HibernateApi.getInstance().factory.openSession(); // implement this
         }
-        Session session = HibernateSession.getInstance().getSession();
-        HibernateSession.getInstance().getSession().clear();
+
+        Transaction tx = session.getTransaction();
+        if (tx == null || !tx.isActive()) {
+            tx = session.beginTransaction();
+        }
+
         Object result = session.find(objClass, primaryKey); // in diesem objekt speichern
-        session.getTransaction().commit();
+
+        tx.commit();
+//        session.close();
+
         return result;
     }
 
     // für assozierte, noch nicht gespeicherte (transient) Objekte
     public void update(){
-        if ( ! HibernateSession.getInstance().getSession().getTransaction().isActive()) {
-            HibernateSession.getInstance().getSession().beginTransaction();
+        Session session = HibernateApi.getInstance().getSession();
+
+        if (session == null || !session.isOpen()) {
+            session = HibernateApi.getInstance().factory.openSession(); // implement this
         }
-        Session session = HibernateSession.getInstance().getSession();
-        HibernateSession.getInstance().getSession().clear();
+
+        Transaction tx = session.getTransaction();
+        if (tx == null || !tx.isActive()) {
+            tx = session.beginTransaction();
+        }
+
         session.update(this);
-        session.getTransaction().commit();
+
+        tx.commit();
+//        session.close();
     }
 
     // für assozierte, bereits gepspeicherte Objekte zu updaten (persistente Objekte)
     public void merge() {
 //        try {
-            if ( ! HibernateSession.getInstance().getSession().getTransaction().isActive()) {
-                HibernateSession.getInstance().getSession().beginTransaction();
-            }
-            Session session = HibernateSession.getInstance().getSession();
-        HibernateSession.getInstance().getSession().clear();
+
+        Session session = HibernateApi.getInstance().getSession();
+
+        if (session == null || !session.isOpen()) {
+            session = HibernateApi.getInstance().factory.openSession(); // implement this
+        }
+
+        Transaction tx = session.getTransaction();
+        if (tx == null || !tx.isActive()) {
+            tx = session.beginTransaction();
+        }
+
         session.merge(this);
-            session.getTransaction().commit();
+
+        tx.commit();
+//        session.close();
+
 //        }
 //        catch (Exception e) {
 //            System.out.println("Rolling back transaction due to: " + e.getMessage());
-//            HibernateSession.getInstance().getSession().getTransaction().rollback();  // ✅ Ensure rollback is handled
+//            tx.rollback();  // ✅ Ensure rollback is handled
 //        }
     }
 
     public void delete() {
 //        try {
-            if (!HibernateSession.getInstance().getSession().getTransaction().isActive()) {
-                HibernateSession.getInstance().getSession().beginTransaction();
+
+            Session session = HibernateApi.getInstance().getSession();
+
+            if (session == null || !session.isOpen()) {
+                session = HibernateApi.getInstance().factory.openSession(); // implement this
             }
-            Session session = HibernateSession.getInstance().getSession();
-        HibernateSession.getInstance().getSession().clear();
-        session.remove(this);
-            session.getTransaction().commit();
+
+            Transaction tx = session.getTransaction();
+            if (tx == null || !tx.isActive()) {
+                tx = session.beginTransaction();
+            }
+
+            session.remove(this);
+
+            tx.commit();
+//            session.close();
 //        }
 //        catch (Exception e) {
 //            System.out.println("Rolling back transaction due to: " + e.getMessage());
-//            HibernateSession.getInstance().getSession().getTransaction().rollback();  // ✅ Ensure rollback is handled
+//            tx.rollback();  // ✅ Ensure rollback is handled
 //        }
     }
 }

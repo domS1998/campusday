@@ -1,0 +1,44 @@
+<h2 mat-dialog-title>Station ändern</h2>
+<mat-dialog-content>
+
+  <div style="display: flex; align-items: center; margin-bottom: 16px;">
+    <label >Name:</label>
+    <mat-form-field appearance="fill" style="flex: 1;">
+      <input matInput [ngModel]="this.data.stationOld.name" (ngModelChange)="this.setStationName($event)" style="padding-left: 4%">
+    </mat-form-field>
+  </div>
+
+  <div style="display: flex; align-items: center;">
+    <label >Nummer:</label>
+    <mat-form-field appearance="fill" style="flex: 1;">
+      <input matInput [ngModel]="this.data.stationOld.number" (ngModelChange)="this.setStationNumber($event)" style="padding-left: 4%">
+    </mat-form-field>
+  </div>
+
+  <div style="display: flex; align-items: center;">
+    <label >Stockwerk:</label>
+    <mat-form-field appearance="fill" style="flex: 1;">
+      <input matInput [ngModel]="this.data.stationOld.location.image" (ngModelChange)="this.setStationLocationImage($event)" style="padding-left: 4%">
+    </mat-form-field>
+  </div>
+
+  <div style="display: flex; align-items: center;">
+    <label >X-Offset:</label>
+    <mat-form-field appearance="fill" style="flex: 1;">
+      <input matInput [ngModel]="this.data.stationOld.location.xcoordinate" (ngModelChange)="this.setStationLocationXcoordinate($event)" style="padding-left: 4%">
+    </mat-form-field>
+  </div>
+
+  <div style="display: flex; align-items: center;">
+    <label >Y-Offset:</label>
+    <mat-form-field appearance="fill" style="flex: 1;">
+      <input matInput [ngModel]="this.data.stationOld.location.ycoordinate" (ngModelChange)="this.setStationLocationYcoordinate($event)" style="padding-left: 4%">
+    </mat-form-field>
+  </div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="center">
+  <button mat-button mat-dialog-close (click)="onCancel()" >Abbrechen</button>
+  <button mat-button color="primary" (click)="onOk()" >OK</button>
+</mat-dialog-actions>

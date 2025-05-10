@@ -1,0 +1,50 @@
+<!-- user-list.component.html -->
+
+<!-- Add User Button -->
+<!--  <button mat-raised-button color="primary" (click)="addUser()">Add User</button>-->
+  <div *ngIf="isLoaded" class="container">
+
+    <!-- Font Awesome CDN for buttons-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <table matSort mat-table [dataSource]="this.users" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="Benutzername">
+        <th mat-sort-header mat-header-cell *matHeaderCellDef> Benutzername</th>
+        <td mat-cell *matCellDef="let element">{{element.username}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="Kartennummer">
+        <th mat-sort-header mat-header-cell *matHeaderCellDef> Kartennummer</th>
+        <td mat-cell *matCellDef="let element">{{element.cardRfid}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="Aktionen">
+        <th mat-header-cell *matHeaderCellDef>Aktionen</th>
+        <td mat-cell *matCellDef="let element">
+          <button class="icon-button delete" (click)="this.deleteUser(element.cardRfid)">
+            <span class="material-icons">delete</span>
+          </button>
+          <button class="icon-button edit">
+            <span class="material-icons">edit</span>
+          </button>
+          <button class="icon-button details">
+            <span class="material-icons">search</span>
+          </button>
+        </td>
+      </ng-container>
+
+      <!-- 👇 THIS IS WHAT WAS LIKELY MISSING -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    </table>
+
+          <button class="round-add-button" mat-raised-button (click)="openDialog()">
+            <mat-icon style="color: white;">add</mat-icon>
+          </button>
+
+<!--    <button mat-icon-button style="background-color: #3f51b5; border-radius: 50%;">-->
+<!--    </button>-->
+
+  </div>

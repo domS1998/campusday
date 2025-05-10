@@ -6,8 +6,10 @@
     <session-factory>
         <!-- Connection settings -->
         <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+
 <!--        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5000/campus_day_app</property>-->
         <property name="hibernate.connection.url">jdbc:postgresql://database:5432/campus_day_app</property>
+
         <property name="hibernate.connection.username">campus_day_app</property>
         <property name="hibernate.connection.password">campus_day_app</property>
         <property name="hibernate.current_session_context_class">thread</property>

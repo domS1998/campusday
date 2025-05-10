@@ -1,0 +1,115 @@
+.main {
+  /*background-color: red;*/
+  min-width: 90%;  /* Optional: Set width */
+  /*min-height: 30.2vh;*/
+  min-height: 33.33%;
+  height: 33.33%;
+  margin: 10px 10px 10px 10px;
+  text-align: center;
+}
+
+.image-container {
+  margin-top: 20px;
+  width: 100%;
+  height: auto; /* Keeps aspect ratio */
+  display: flex;
+
+  /*position: relative; !* Parent must be relative *!*/
+}
+
+/*.image-wrapper {*/
+/*  position: relative; !* Parent must be relative *!*/
+/*}*/
+
+.image-label {
+  font-weight: 700;
+  font-size: 15px;
+  color: #004080;
+  display: flex;
+  justify-content: center; /* centers horizontally */
+  align-items: center;      /* centers vertically */
+  width: 70%; /*takes as much space as available through parent div*/
+}
+
+img {
+  /*margin-top: 30px;*/
+  margin-top: 3.5%;
+  width: 85%;
+  height: auto; /* Keeps aspect ratio */
+  position: relative;
+}
+
+/*Kreis mit Haken für abgeschlossene Station*/
+.circle-ticked {
+  font-size: 20px;
+
+  position: absolute;
+  /*top: 0px; !* Adjust as needed *!*/
+  /*left: 0px; !* Adjust as needed *!*/
+
+  top: var(--offset-y);
+  left: var(--offset-x);
+
+  width: 33px;
+  height: 33px;
+  /*background-color: rgba(0, 255, 0, 1.0);*/
+  background-color: #00B109;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+}
+
+/*Leerer, Roter Kreis mit Nummer*/
+.circle-unticked {
+  font-size: 20px;
+  position: absolute;
+
+  /*top: 10px; !* Adjust as needed *!*/
+  /*left: 400px; !* Adjust as needed *!*/
+  top: var(--offset-y);
+  left: var(--offset-x);
+
+  width: 33px;
+  height: 33px;
+  /*background-color: rgba(255, 0, 0, 1.0); */
+  /*background-color: #CC1313;*/
+  background-color: #0071BC;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+}
+
+
+/*location pin icon */
+
+.location-pin {
+  left: var(--offset-x);
+  top: var(--offset-y);
+  width: 20px;
+  height: 20px;
+  background: red;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  position: absolute;
+  margin: 50px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.3);
+}
+
+.location-pin::after {
+  left: var(--offset-x);
+  top: var(--offset-y);
+  content: '';
+  width: 10px;
+  height: 10px;
+  background: white;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  border-radius: 50%;
+}

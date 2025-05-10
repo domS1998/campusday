@@ -1,0 +1,112 @@
+app-userlist {
+  width: 100%;
+
+}
+
+table{
+  /*margin: 2%;*/
+  /*border: 1px solid #0071BC !important;*/
+  /*border-radius: 5px;*/
+}
+
+.details-button:hover {
+  background: white !important;
+  color: #004080 !important;
+  /*border: solid 3px #004080 !important;*/
+}
+
+th{
+  /*background-color: #0071BC !important;*/
+  /*color: white;*/
+  color: #004080 !important;
+}
+
+.icon-button {
+  border: none;
+  border-radius: 8px;
+  padding: 2px;
+  margin: 5px;
+  cursor: pointer;
+  color: white;
+  font-size: 12px;
+}
+
+.delete {
+  /*background: white;*/
+  /*color: #f44336;*/
+  color: #4F5054;
+  background-color: white;
+
+}
+.delete:hover {
+  /*background-color: #f44336;*/
+  /*color: white;*/
+  background-color: #4F5054;
+  color: white;
+}
+
+.edit {
+  /*background-color: white;*/
+  /*color: #FFBD2E;*/
+  color: #4F5054;
+  background-color: white;
+}
+.edit:hover {
+  /*background: #FFBD2E !important;*/
+  /*color: white;*/
+  background-color: #4F5054;
+  color: white;
+}
+
+.details {
+  /*color: #4caf50;*/
+  /*background-color: white;*/
+  color:  #4F5054;
+  background-color: white;
+}
+.details:hover {
+  /*background-color: #4caf50; !* Green *!*/
+  /*color: white;*/
+  background-color:  #4F5054;
+  color: white;
+}
+
+.icon-button i {
+  pointer-events: none; /* Ensures clicks target the button */
+}
+
+input {
+  /*padding: 0px;*/
+  height: 30px;
+  width: 50px
+}
+
+.footer {
+  /*border: 1px solid #0071BC;*/
+}
+
+.round-add-button {
+  background-color: #0071BC;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  border: none;
+  box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+  position: absolute;
+  /*left: 97%;*/
+  right: 0.5%;
+  top: 0.5%;
+}
+
+.round-add-button:hover {
+  background-color: #004080;
+  /*color: #0071BC;*/
+  /*box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);*/
+}
+
+.round-add-button mat-icon {
+  color: white;
+  /*background-color: #004080;*/
+}
+
+

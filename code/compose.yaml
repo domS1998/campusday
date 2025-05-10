@@ -25,11 +25,26 @@ services:
     container_name: reverse-proxy
     restart: always
 
+  # angular client app + nginx webserver
+  dashboard:
+    build:
+      context: ./dashboard
+      dockerfile: Dockerfile
+    networks: # attach to custom bridge network
+      - campus_day_app
+    hostname: dashboard # set custom DNS name within bridge network
+    expose:
+      - 82  # open port within container
+    ports:
+      - "4201:82" # forword port 80 on bridge network to port 4200 on host
+    container_name: dashboard
+    restart: always
 
   # angular client app + nginx webserver
   webclient:
     build:
-      context: ./webclient
+#      context: ./webclient
+      context: ./ui
       dockerfile: Dockerfile
     networks: # attach to custom bridge network
       - campus_day_app

@@ -3,9 +3,11 @@ package org.server.orm.classes;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.server.orm.AbstractDAO;
-import org.server.orm.HibernateSession;
+import org.server.orm.HibernateApi;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -68,11 +70,21 @@ public class StationDAO extends AbstractDAO {
 
     // alle vorhandenen Stationen laden
     public static ArrayList<StationDAO> loadAll() {
-        if ( ! HibernateSession.getInstance().getSession().getTransaction().isActive()) {
-            HibernateSession.getInstance().getSession().beginTransaction();
+
+        Session session = HibernateApi.getInstance().getSession();
+
+        if (session == null || !session.isOpen()) {
+            session = HibernateApi.getInstance().factory.openSession(); // implement this
         }
-        List<StationDAO> stations = HibernateSession.getInstance().getSession().createQuery("FROM StationDAO", StationDAO.class).list();
-        HibernateSession.getInstance().getSession().getTransaction().commit();
+        Transaction tx = session.getTransaction();
+        if (tx == null || !tx.isActive()) {
+            tx = session.beginTransaction();
+        }
+        List<StationDAO> stations = session.createQuery("FROM StationDAO", StationDAO.class).list();
+
+        tx.commit();
+//        session.close();
+
         return new ArrayList<>(stations);
     }
 
@@ -92,19 +104,33 @@ public class StationDAO extends AbstractDAO {
     // Station über Namen laden
     public static StationDAO findByName(String stationName){
         StationDAO result = null;
+        Session session   = null;
+        Transaction tx    = null;
+
         try {
-            if ( !HibernateSession.getInstance().getSession().getTransaction().isActive() ) {
-                HibernateSession.getInstance().getSession().beginTransaction();
+            session = HibernateApi.getInstance().getSession();
+
+            if (session == null || !session.isOpen()) {
+                session = HibernateApi.getInstance().factory.openSession(); // implement this
             }
-            Query<StationDAO> query = HibernateSession.getInstance().getSession().createNamedQuery(
+
+            tx = session.getTransaction();
+            if (tx == null || !tx.isActive()) {
+                tx = session.beginTransaction();
+            }
+
+            Query<StationDAO> query = session.createNamedQuery(
                 "Station.findByName", StationDAO.class
             );
             query.setParameter("name", stationName);
             result = query.uniqueResult();
+
+            tx.commit();
+//            session.close();
         }
         catch (Exception e) {
             System.out.println("Rolling back transaction due to: " + e.getMessage());
-            HibernateSession.getInstance().getSession().getTransaction().rollback();  // ✅ Ensure rollback is handled
+            tx.rollback();  // ✅ Ensure rollback is handled
         }
         return result;
     }
@@ -112,19 +138,31 @@ public class StationDAO extends AbstractDAO {
     // Station über Namen laden
     public static StationDAO findByNumber(String stationNumber){
         StationDAO result = null;
+        Session session   = null;
+        Transaction tx    = null;
         try {
-            if ( !HibernateSession.getInstance().getSession().getTransaction().isActive() ) {
-                HibernateSession.getInstance().getSession().beginTransaction();
+            session = HibernateApi.getInstance().getSession();
+
+            if (session == null || !session.isOpen()) {
+                session = HibernateApi.getInstance().factory.openSession(); // implement this
             }
-            Query<StationDAO> query = HibernateSession.getInstance().getSession().createNamedQuery(
+
+            tx = session.getTransaction();
+            if (tx == null || !tx.isActive()) {
+                tx = session.beginTransaction();
+            }
+            Query<StationDAO> query = session.createNamedQuery(
                 "Station.findByNumber", StationDAO.class
             );
             query.setParameter("number", stationNumber);
             result = query.uniqueResult();
+
+            tx.commit();
+//            session.close();
         }
         catch (Exception e) {
             System.out.println("Rolling back transaction due to: " + e.getMessage());
-            HibernateSession.getInstance().getSession().getTransaction().rollback();  // ✅ Ensure rollback is handled
+            session.getTransaction().rollback();  // ✅ Ensure rollback is handled
         }
         return result;
     }
