@@ -5,7 +5,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatFormField} from '@angular/material/input';
 
 @Component({
-  selector: 'app-update-station-form',
+  selector: 'app-update-user-form',
   imports: [
     MatDialogActions,
     MatDialogContent,

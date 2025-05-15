@@ -2,7 +2,7 @@ FROM maven AS build
 LABEL authors="ubuntu"
 WORKDIR /app
 COPY . .
-RUN mvn clean
+#RUN mvn clean
 RUN mvn package -Dmaven.test.skip
 
 FROM openjdk:17

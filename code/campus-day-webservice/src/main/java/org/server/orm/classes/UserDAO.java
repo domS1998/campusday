@@ -37,11 +37,12 @@ public class UserDAO extends AbstractDAO {
 //    private String id = UUID.randomUUID().toString();
 
     // variabler Benutzername
-    @Id
+//    @Id
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 
     // rfid der Chipkarte
+    @Id
     @Column(name = "card_rfid", nullable = false, unique = true)
     private String cardRfid;
 

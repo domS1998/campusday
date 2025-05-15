@@ -11,6 +11,8 @@ import {ViewEncapsulation } from '@angular/core';
 import {MatInputModule} from '@angular/material/input';
 import {InputDialogComponent} from './add-user-form/input-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
+import {UpdateUserFormComponent} from './update-user-form/update-user-form.component';
+import {UpdateUserService} from '../../../services/update-user/update-user.service';
 
 
 @Component({
@@ -41,6 +43,7 @@ export class UserlistComponent {
 
   constructor(
     private getUsersService: GetUsersService,
+    private updateUserService: UpdateUserService,
     private httpClient: HttpClient,
     public dialog: MatDialog
   ) {}
@@ -48,11 +51,7 @@ export class UserlistComponent {
   ngOnInit(): void {
     this.getUsersService.getData().subscribe((response: UserListModel) => {
       this.users = this.getUsersService.parseUsersFromJson(response.users);
-      // console.log(response);
-      // console.log(this.users); // Now you have the real UserModel[]
       console.log(JSON.stringify(this.users, null, 4)); // Pretty-printed output
-      // this.fillDataSource()
-      // console.log(JSON.stringify(this.dataSource, null, 5)); // Pretty-printed output
       this.isLoaded = true;
     });
   }
@@ -130,5 +129,50 @@ export class UserlistComponent {
     });
   }
 
+  // für Form Popup
+  openUpdateUserDialog(userOld: UserModel): void {
+
+    console.log("user received through edit button: \n" + userOld);
+
+    const dialogRef = this.dialog.open(UpdateUserFormComponent, {
+      width: '20vw',
+      data: { userOld: userOld}
+    });
+    dialogRef.afterClosed().subscribe(userReturned => {
+      if (userReturned) {
+        console.log("updated user received from form dialog: \n" + JSON.stringify(userReturned, null, 5)); // Pretty-printed output
+
+        this.updateUserService.updateUser(userReturned)
+
+        // // Zu passender Nachricht umwandeln
+        // const updateUserMessage = {
+        //   cardId  : userReturned.username,
+        //   username: userReturned.cardRfid,
+        // };
+
+        // console.log("updated user in AddUserMessage: \n" + JSON.stringify(updateUserMessage, null, 5)); // Pretty-printed output
+
+      //   this.httpClient.put('http://localhost:8080/api/user', updateUserMessage).subscribe({
+      //     next: (postedUser) => {
+      //       console.log('User updated successfully:', postedUser);
+      //
+      //       // Station laden und in Liste einfügen
+      //       this.isLoaded = false;
+      //       this.getUsersService.getData().subscribe((response: UserListModel) => {
+      //         this.users = this.getUsersService.parseUsersFromJson(response.users);
+      //         this.isLoaded = true;
+      //       });
+      //     },
+      //     error: (error) => {
+      //       console.error('Error updating station:', error);
+      //       // Show an error message to the user or handle retry logic
+      //     },
+      //     complete: () => {
+      //       console.log('PUT request completed.');
+      //     }
+      //   });
+      }
+    });
+  }
 
 }

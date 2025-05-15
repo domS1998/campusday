@@ -1,0 +1,28 @@
+
+.flex-container {
+  /*background-color: aqua;*/
+  margin: 0;
+  display: flex;
+  /*flex-direction: row;*/
+  /*align-items: flex-start; !* Ensures margins work *!*/
+  width: 100%;
+
+  /*height: 100%;*/
+  height: 70%;
+
+}
+
+.app-container {
+  width: calc(100vw/* - 17px*/);
+
+  /*height: calc(100vh!* - 80px*!);*/
+  height: 100%;
+  /*height: 60%;*/
+
+  /*background-color: violet;*/
+}
+
+h1 {
+  text-align: center;
+}
+

@@ -1,14 +1,13 @@
-import {Component, inject} from '@angular/core';
+import {Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import {GetUserDataService} from '../services/get-user-data/get-user-data.service';
-import {UserModel} from '../models/user.model';
-import {StationDisplayBarComponent} from './station-display-bar/station-display-bar.component';
-import {ImageBarComponent} from './image-bar/image-bar.component';
-import {HttpClient} from '@angular/common/http';
-import {HeaderComponent} from './header/header.component';
-import {FooterComponent} from './footer/footer.component';
-import {UsbService} from '../services/usb-service/usb.service';
-import {NgIf} from '@angular/common';
+import { GetUserDataService } from '../services/get-user-data/get-user-data.service';
+import { FooterComponent } from './user-page/footer/footer.component';
+import { UsbService } from '../services/usb-service/usb.service';
+import { NgSwitch } from '@angular/common';
+import { LandingPageComponent } from './landing-page/landing-page.component';
+import { UserPageComponent } from './user-page/user-page.component';
+import { CommonModule } from '@angular/common';
+import { GlobalConfigService } from '../services/global-config/global-config.service';
 
 @Component({
   standalone: true,
@@ -17,11 +16,11 @@ import {NgIf} from '@angular/common';
   styleUrl: './app.component.css',
   imports: [
     RouterOutlet,
-    StationDisplayBarComponent,
-    ImageBarComponent,
-    HeaderComponent,
     FooterComponent,
-    NgIf,
+    CommonModule,
+    NgSwitch,
+    LandingPageComponent,
+    UserPageComponent,
     // HeaderComponent,
   ],
   providers: [
@@ -29,48 +28,65 @@ import {NgIf} from '@angular/common';
 })
 export class AppComponent {
 
-  // Kartennummer, um Benutzer zu laden
-  private cardNumber = ""
-
-  // Kartenlesegerätsnummer, um im UI den verwendeten Kartenleser zu markieren
-  private readerNumber = ""
-
-  // Schalter zu laden,
-  //  Seite erst laden, wenn Signal von Karte über USB eingeht
-  protected load: boolean = false;
+  protected readonly PageType = PageType;
+  protected pageType: PageType = PageType.LANDING_PAGE;
+  timerId: any;
 
   constructor(
-    // private userDataService: GetUserDataService,
-    // private httpClient: HttpClient
+    private userDataService: GetUserDataService,
     private usbService: UsbService,
-  ) {
-
-    // this.userDataService.getData().subscribe(user => {
-    //   this.user = user;
-    // });
-    // console.log(this.user);
-  }
+    private globalConfig: GlobalConfigService,
+  ) {}
 
   ngOnInit() {
-
     // Seite mit gegebener Kartennummer laden,
     //  wenn über USB eine Nachricht emfangen wird
     this.usbService.onMessage((msg) => {
       console.log("usb-sevice: load user \n" + msg + "");
 
       try {
-        const obj = JSON.parse(msg);
-        this.readerNumber = obj.readerNumber;
-        this.cardNumber = obj.cardNumber;
-        console.log(this.readerNumber); // "1"
-        console.log(this.cardNumber);   // "0000-0001"
+        const message = JSON.parse(msg);
+        this.globalConfig.cardNumber = message.cardNumber;
+        this.globalConfig.readerNumber = message.readerNumber;
+
+        // Benutzer mit Kartennummer laden und zu globaler Config hinzufügen
+        this.userDataService.loadUserdata(this.globalConfig.cardNumber).subscribe(
+          userLoaded => {
+            this.globalConfig.user = userLoaded
+          }
+        )
 
         // Seite laden
-        this.load = true;
+        // this.load = true;
+        this.pageType = PageType.USER_PAGE;
+
+        // Nach 30s wieder zur Startseite
+        this.startTimer(this.globalConfig.userpageTimeout);
       }
       catch (err) {
         console.error('Invalid JSON:', err);
       }
     });
   }
+
+  startTimer(seconds: number) {
+    this.clearTimer(); // cancel existing timer
+    this.timerId = setTimeout(() => {
+      this.pageType = PageType.LANDING_PAGE;
+    }, seconds * 1000);
+  }
+
+  clearTimer() {
+    if (this.timerId) {
+      clearTimeout(this.timerId);
+      this.timerId = null;
+      console.log('Timer reset');
+    }
+  }
 }
+
+export enum PageType {
+  LANDING_PAGE,
+  USER_PAGE
+}
+

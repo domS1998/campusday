@@ -8,9 +8,11 @@ import {UserStationModel} from '../../models/user-station-model';
   providedIn: 'root'
 })
 export class GetUserDataService {
+
   // private apiUrl = 'http://localhost/services/user/0000-0001'
   private apiUrl = 'http://localhost:8080/api/user/0000-0001'
   // inject HttpClient instance
+
   constructor(
     private httpClient: HttpClient,
 ) {}
@@ -36,6 +38,7 @@ export class GetUserDataService {
       })
     );
   }
+
 
 // Helper method to map a single station object to UserStationModel
   private mapToUserStationModel(station: any): UserStationModel {

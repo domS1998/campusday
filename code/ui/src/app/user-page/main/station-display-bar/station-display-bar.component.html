@@ -3,8 +3,8 @@
 
   <!-- Stationsliste -->
   <div *ngIf="this.isLoaded" class="station-list-container">
-<!--    <div *ngIf="this.user == " >-->
-    <div *ngFor="let userStation of userStations">
+<!--    <div *ngFor="let userStation of userStations">-->
+    <div *ngFor="let userStation of this.globalConfig.user.userStations">
 
       <!-- Kreis mit Haken vor Stationsname, falls schon abgehakt -->
         <div *ngIf="userStation?.completed == true, else incomplete" class="checkmark-with-text">

@@ -9,30 +9,34 @@ import {NoCacheInterceptor} from '../no-cache-interceptor/no-cache-interceptor.s
   providedIn: 'root'
 })
 export class GetUserDataService {
-  // private apiUrl = 'http://localhost/services/user/0000-0001'
-  private apiUrl = 'http://localhost:8080/api/user/0000-0001'
-  // inject HttpClient instance
+
+  private apiUrl = 'http://localhost:8080/api/user'
+  public user: UserModel | null = null;
+
   constructor(
     private httpClient: HttpClient,
-    private noCacheService: NoCacheInterceptor
-) {}
+  ) {}
 
-  // GET http://localhost:8080/api/user/0000-0001
-  public getData(): Observable<UserModel> {
-    const timestamp = new Date().getTime(); // Cachen von Get request verhindern
-    return this.httpClient.get<UserWrapperModel>(this.apiUrl + `?t=${timestamp}`).pipe(
+  public loadUserdata(cardRfId: string): Observable<UserModel> {
+
+    console.log('Loading user with card \'' + cardRfId +'\'' );
+
+    return this.httpClient.get<UserWrapperModel>(this.apiUrl+'/'+cardRfId).pipe(
       tap(response => console.log('Raw API response:\n', response)),  // Log the raw response
       map(response => {
-        // Extract the 'user' field from the response and map it to UserModel
+        // Extract the 'user' field from the response
         const user = response?.user;
-        // return model parsed from user as json
-        return {
-          username: user?.username ?? null,
-          cardRfid: user?.cardRfid ?? null,
+
+        // Store the mapped result before returning
+        const result: UserModel = {
+          username: user?.username ?? 'Unknown',
+          cardRfid: user?.cardRfid ?? 'N/A',
           userStations: Array.isArray(user?.userStations)
             ? user.userStations.map((station: any) => this.mapToUserStationModel(station))
             : []  // Default to empty array if userStations is not an array
         };
+        this.user = result;
+        return result;
       })
     );
   }

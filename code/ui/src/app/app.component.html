@@ -1,13 +1,25 @@
 <div class="app-container">
 
-  <header>
-    <app-header></app-header>
-  </header>
+<!--  <header>-->
+<!--    <app-header></app-header>-->
+<!--  </header>-->
 
-  <main *ngIf="this.load" class = "flex-container">
-    <app-image-bar></app-image-bar>
-    <app-station-display-bar></app-station-display-bar>
-  </main>
+<!--  <main *ngIf="this.pageType == PageType.LANDING_PAGE" class = "flex-container">-->
+<!--    <app-image-bar></app-image-bar>-->
+<!--    <app-station-display-bar></app-station-display-bar>-->
+<!--  </main>-->
+
+  <div [ngSwitch]="this.pageType" class = "flex-container">
+    <div *ngSwitchCase="PageType.LANDING_PAGE">
+      <app-landing-page></app-landing-page>
+    </div>
+    <div *ngSwitchCase="PageType.USER_PAGE">
+      <app-user-page></app-user-page>
+    </div>
+    <div *ngSwitchDefault>
+      <!--   default page component   -->
+    </div>
+  </div>
 
   <footer>
     <app-footer></app-footer>

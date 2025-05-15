@@ -9,6 +9,7 @@ import org.server.api.JsonSerializable;
 @AllArgsConstructor
 @Builder
 public class UpdateUserResponse extends JsonSerializable {
-    private boolean authorized;
+    private boolean cardIdOk;
+    private boolean usernameOk;
     private boolean updated;
 }

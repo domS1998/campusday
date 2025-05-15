@@ -1,0 +1,32 @@
+<div class="station-display-container">
+<!--  <h1>Stationen</h1>-->
+
+  <!-- Stationsliste -->
+  <div *ngIf="this.isLoaded" class="station-list-container">
+<!--    <div *ngIf="this.user == " >-->
+    <div *ngFor="let userStation of userStations">
+
+<!--      &lt;!&ndash; Kreis mit Haken vor Stationsname, falls schon abgehakt &ndash;&gt;-->
+<!--        <div *ngIf="userStation?.completed == true, else incomplete" class="checkmark-with-text">-->
+<!--          <div class="checkmark-circle"></div>-->
+<!--          <span>{{userStation.station.name}}</span>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; ansonsten Leerer Kreis vor Stationsname &ndash;&gt;-->
+<!--        <ng-template #incomplete>-->
+<!--        <div class="empty-circle-with-text">-->
+<!--          <div class="empty-circle"></div>-->
+<!--          <span>{{userStation.station.name}}</span>-->
+<!--        </div>-->
+<!--        </ng-template>-->
+
+        <div class="empty-circle-with-text">
+          <div class="empty-circle"></div>
+          <span>{{userStation.station.name}}</span>
+        </div>
+
+
+    </div>
+  </div>
+
+</div>

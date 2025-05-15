@@ -69,19 +69,16 @@ export class StationlistComponent {
   }
 
   // Benutzer löschen
-  deleteUser(stationName: string): void {
+  deleteStation(stationName: string): void {
 
-    // 1.) DELETE user/...
-
-    // 2.) Benutzer aus Liste entfernen, falls erfolgreich
-
+    // Station aus Datenbank löschen
     this.httpClient.delete('http://localhost:8080/api/station/' + stationName, ).subscribe({
 
       // Bei Erfolg
       next: (updatedUser) => {
         console.log('Station deleted successfully:', updatedUser);
 
-        // gelöschten Benutzer aus Liste erfüllen
+        // gelöschte Station aus Liste erfüllen
         this.stations = this.stations.filter(item => item.name !== stationName);
 
       },
@@ -93,11 +90,6 @@ export class StationlistComponent {
         console.log('DELETE request completed.');
       }
     });
-
-  }
-
-  // Stationsliste für Benutzer anzeigen
-  showDetails(username: string): void {
 
   }
 

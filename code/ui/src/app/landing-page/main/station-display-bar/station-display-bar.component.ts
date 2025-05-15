@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import {CommonModule, NgForOf} from "@angular/common";
 import {HttpClient} from '@angular/common/http';
-import {GetUserDataService} from '../../services/get-user-data/get-user-data.service';
-import {UserModel} from '../../models/user.model';
-import {StationModel} from '../../models/station-model';
-import {UserStationModel} from '../../models/user-station-model';
+import {GetUserDataService} from '../../../../services/get-user-data/get-user-data.service';
+import {UserModel} from '../../../../models/user.model';
+import {StationModel} from '../../../../models/station-model';
+import {UserStationModel} from '../../../../models/user-station-model';
 import {delay} from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import {FooterComponent} from '../footer/footer.component';
+import {FooterComponent} from '../../footer/footer.component';
+import {GlobalConfigService} from '../../../../services/global-config/global-config.service';
 
 @Component({
   standalone: true,
@@ -30,41 +31,31 @@ export class StationDisplayBarComponent {
   isLoaded = false;
 
   constructor( private userDataService: GetUserDataService,
-               private httpClient: HttpClient
+               private globalConfig: GlobalConfigService,
   ){}
 
   // Initialisierung der Komponente
   ngOnInit(): void {
 
     // Benutzerdaten laden
-    this.userDataService.getData().subscribe(
-      user => {
-        console.log(user);
-
-        // Falls Benutzer nicht existiert
-        if (user.username == null) {
-          // ...
-        }
-        this.user = user;
-        this.userStations = this.user.userStations
-
-        // console.log("userStations before sorting: \n")
-        // this.userStations.forEach((userStation: UserStationModel) => {
-          // console.log(userStation.station.number + "\n");
-        // })
-
-        // Stationen sortieren vor Anzeige
-        this.sortStationsByNumber()
-
-        // console.log("userStations after sorting: \n")
-        // this.userStations.forEach((userStation: UserStationModel) => {
-        //   console.log(userStation.station.number + "\n");
-        // })
-
-        // Observable als fertig geladen markieren
+    // this.userDataService.loadUserdata(this.globalConfig.cardNumber).subscribe(
+    //   user => {
+    //     console.log(user);
+    //
+    //     // Falls Benutzer nicht existiert
+    //     if (user.username == null) {
+    //       // ...
+    //     }
+    //     this.user = user;
+    //     this.userStations = this.user.userStations
+    //
+    //     // Stationen sortieren vor Anzeige
+    //     this.sortStationsByNumber()
+    //
+    //     // Observable als fertig geladen markieren
         this.isLoaded = true;
-      }
-    );
+    //   }
+    // );
   }
 
 

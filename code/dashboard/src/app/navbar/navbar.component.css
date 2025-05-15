@@ -23,27 +23,9 @@ mat-toolbar {
   background-color: white !important;
 }
 
-/*.icon {*/
-/*  color: white !important;*/
-/*  background-color: #0071BC !important;*/
-/*  transition: background-color 0.3s ease !important;*/
-
-/*  border-radius: 45% !important;*/
-/*  border: none !important;*/
-/*  padding: 0 0 0 0 !important;*/
-/*  margin: 0 0 0 0 !important;*/
-/*}*/
-
-/*.icon:hover {*/
-/*  color: #0071BC !important;*/
-/*  background-color: white !important;*/
-
-/*  border-radius: 45% !important;*/
-/*  border: none !important;*/
-/*  padding: 0 0 0 0 !important;*/
-/*  margin: 0 0 0 0 !important;*/
-/*}*/
-
+span {
+  margin-left: 1vw
+}
 
 .toolbar-item-spacer {
   flex: 1 1 auto;

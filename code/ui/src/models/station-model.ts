@@ -4,6 +4,10 @@ export interface StationModel {
   location: Location
 }
 
+export class StationListModel {
+  stations!: StationModel[];
+}
+
 export interface Location {
   image: FloorPlanImage;
   xcoordinate: number;

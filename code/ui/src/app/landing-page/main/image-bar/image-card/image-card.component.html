@@ -1,0 +1,63 @@
+<div class="main" *ngFor="let item of this.combinedList">
+<!--  {{item.label}}-->
+  <div class="image-container">
+    <div class="image-label">
+      {{item.label}}
+    </div>
+      <img [src]="item.imageName" [alt]="item.label">
+
+<!--        3 Pins für Reader-->
+    <div *ngFor="let pinOffset of pinOffsets" class="location-pin"
+         [ngStyle]="{
+                      '--offset-x': pinOffset.x + 'vw',
+                      '--offset-y': pinOffset.y + 'vh'
+          }"
+    ></div>
+
+<!--    <div *ngFor="let pinOffset of pinOffsets; let i = index" class="location-pin"-->
+<!--         [ngStyle]="i === parseInt(globalConfig.cardNumber, 10) ? {-->
+<!--                  '&#45;&#45;offset-x': pinOffset.x + 'vw',-->
+<!--                  '&#45;&#45;offset-y': pinOffset.y + 'vh',-->
+<!--                  '&#45;&#45;pin-color': '#FF0000'-->
+<!--               } : {-->
+<!--                  '&#45;&#45;pin-color': '#D3D3D3'-->
+<!--               }">-->
+<!--      {{ pinOffset }}-->
+<!--    </div>-->
+
+
+
+
+
+
+    <!-- Wenn Benuzterdaten fertig geladen sind-->
+    <div *ngIf="this.isLoaded">
+
+    <!-- Für alle Stationen ein rundes Div auf den Bildern plazieren -->
+      <div *ngFor="let station of this.globalConfig.stations"
+
+                 [style.--offset-x]="this.calculateCoordinatesVh_Vw(station).xOffset + 'vw'"
+                 [style.--offset-y]="this.calculateCoordinatesVh_Vw(station).yOffset + 'vh'"
+
+      >
+<!--        &lt;!&ndash; Kreis mit Haken, falls schon abgehakt &ndash;&gt;-->
+<!--        <div *ngIf="userStation?.completed, else incomplete" class="circle-ticked">✓&lt;!&ndash; Circle placed on top &ndash;&gt;</div>-->
+
+<!--        &lt;!&ndash; ansonsten roter Kreis mit Stationsnummer &ndash;&gt;-->
+<!--        <ng-template #incomplete>-->
+<!--            <div class="circle-unticked">{{userStation.station.number}}&lt;!&ndash;✓&ndash;&gt;</div> &lt;!&ndash; Circle placed on top &ndash;&gt;-->
+<!--        </ng-template>-->
+
+        <div>
+          <div class="circle-unticked">{{station.number}}<!--✓--></div> <!-- Circle placed on top -->
+        </div>
+
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+<!--[style.&#45;&#45;offset-x]="this.calculateCoordinates(userStation).xOffset + 'px'"-->
+<!--[style.&#45;&#45;offset-y]="this.calculateCoordinates(userStation).yOffset + 'px'"-->
