@@ -1,6 +1,6 @@
 import {Component, inject} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import {GetUserDataService} from '../services/get-user-data/get-user-data.service';
+import {GetUserDataService} from '../services/user/get-user-data/get-user-data.service';
 import {NavbarComponent} from './navbar/navbar.component';
 
 @Component({
@@ -21,12 +21,5 @@ export class AppComponent {
   private title = 'Campus Day App'
 
   constructor(
-    // private userDataService: GetUserDataService,
-    // private httpClient: HttpClient
-  ) {
-    // this.userDataService.getData().subscribe(user => {
-    //   this.user = user;
-    // });
-    // console.log(this.user);
-  }
+  ) {}
 }

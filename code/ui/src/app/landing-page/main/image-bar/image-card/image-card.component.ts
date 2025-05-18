@@ -39,7 +39,7 @@ export class ImageCardComponent {
   // Wenn Komponente initialisiert wird, Benuzterdaten von API laden
   ngOnInit(): void {
     this.getStationsService.getData().subscribe((response: StationListModel) => {
-      this.globalConfig.stations = this.getStationsService.parseStationsFromJson(response.stations);
+      this.globalConfig.STATIONS = this.getStationsService.parseStationsFromJson(response.stations);
       this.isLoaded = true;
     });
   }

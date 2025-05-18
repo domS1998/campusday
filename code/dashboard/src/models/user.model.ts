@@ -21,3 +21,17 @@ export class UserListModel {
   users!: UserModel[];
 }
 
+export interface InsertUserMessageModel {
+  username: string;
+  cardId: string;
+}
+
+export interface InsertUserMessageResponseModel {
+  usernameExits: boolean
+  cardIdExits: boolean
+  success: boolean
+}
+
+export interface DeleteUserResponseModel {
+  deleted: boolean
+}

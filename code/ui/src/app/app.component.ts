@@ -46,13 +46,13 @@ export class AppComponent {
 
       try {
         const message = JSON.parse(msg);
-        this.globalConfig.cardNumber = message.cardNumber;
-        this.globalConfig.readerNumber = message.readerNumber;
+        this.globalConfig.CARD_NUMBER = message.cardNumber;
+        this.globalConfig.READER_NUMBER = message.readerNumber;
 
         // Benutzer mit Kartennummer laden und zu globaler Config hinzufügen
-        this.userDataService.loadUserdata(this.globalConfig.cardNumber).subscribe(
+        this.userDataService.loadUserdata(this.globalConfig.CARD_NUMBER).subscribe(
           userLoaded => {
-            this.globalConfig.user = userLoaded
+            this.globalConfig.USER = userLoaded
           }
         )
 
@@ -61,7 +61,7 @@ export class AppComponent {
         this.pageType = PageType.USER_PAGE;
 
         // Nach 30s wieder zur Startseite
-        this.startTimer(this.globalConfig.userpageTimeout);
+        this.startTimer(this.globalConfig.USERPAGE_TIMEOUT);
       }
       catch (err) {
         console.error('Invalid JSON:', err);

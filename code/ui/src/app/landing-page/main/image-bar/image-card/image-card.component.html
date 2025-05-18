@@ -34,7 +34,7 @@
     <div *ngIf="this.isLoaded">
 
     <!-- Für alle Stationen ein rundes Div auf den Bildern plazieren -->
-      <div *ngFor="let station of this.globalConfig.stations"
+      <div *ngFor="let station of this.globalConfig.STATIONS"
 
                  [style.--offset-x]="this.calculateCoordinatesVh_Vw(station).xOffset + 'vw'"
                  [style.--offset-y]="this.calculateCoordinatesVh_Vw(station).yOffset + 'vh'"

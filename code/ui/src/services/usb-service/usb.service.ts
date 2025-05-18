@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import {GlobalConfigService} from '../global-config/global-config.service';
 
 
 
@@ -8,8 +9,11 @@ import { Injectable } from '@angular/core';
 export class UsbService {
   private socket
 
-  constructor() {
-    this.socket = new WebSocket('ws://localhost:3001');
+  constructor(
+    private globalConfig: GlobalConfigService
+  ) {
+    console.log('ws://'+this.globalConfig.WEBSOCKET_HOST+':'+this.globalConfig.WEBSOCKET_PORT)
+    this.socket = new WebSocket('ws://'+this.globalConfig.WEBSOCKET_HOST+':'+this.globalConfig.WEBSOCKET_PORT);
 
     this.socket.onopen = () => console.log('WebSocket connected');
     this.socket.onclose = () => console.log('WebSocket disconnected');

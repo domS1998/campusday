@@ -3,8 +3,8 @@ import { WebSocketServer } from 'ws';
 
 const serial = new SerialPort({ path: '/dev/ttyUSB0', baudRate: 115200 }); // Adjust path
 
-const wss = new WebSocketServer({ port: 3001 });
-console.log('WebSocket server running on ws://localhost:3001');
+const wss = new WebSocketServer({ port: 8000 });
+console.log('WebSocket server running on ws://localhost:8000');
 
 wss.on('connection', (ws) => {
   console.log('Frontend connected via WebSocket');
@@ -47,3 +47,7 @@ wss.on('connection', (ws) => {
     console.log('Frontend disconnected');
   });
 });
+
+
+
+

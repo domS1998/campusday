@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {map, Observable, tap} from 'rxjs';
-import {UserModel, UserWrapperModel} from '../../models/user.model';
-import {UserStationModel} from '../../models/user-station-model';
-import {GlobalConfigService} from '../global-config/global-config.service';
+import {UserModel, UserWrapperModel} from '../../../models/user.model';
+import {UserStationModel} from '../../../models/user-station-model';
+import {GlobalConfigService} from '../../global-config/global-config.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +22,7 @@ export class GetUserDataService {
 
     console.log('Loading user with card \'' + cardRfId +'\'' );
 
-    return this.httpClient.get<UserWrapperModel>(this.globalConfig.SERVER_URL + 'user'+'/'+cardRfId).pipe(
+    return this.httpClient.get<UserWrapperModel>(this.globalConfig.serverUrl + 'user'+'/'+cardRfId).pipe(
       tap(response => console.log('Raw API response:\n', response)),  // Log the raw response
       map(response => {
         // Extract the 'user' field from the response

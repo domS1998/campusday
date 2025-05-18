@@ -1,0 +1,4 @@
+wlan-name: OpenCampus 
+password : 89=Jpk9Z85SZc56p
+ports    : ping, 80, 443, 22
+host     : 141.18.1.124

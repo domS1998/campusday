@@ -33,3 +33,24 @@ export enum FloorPlanImage {
   G21 = "G21",
   G22 = "G22",
 }
+
+export interface UpdateStationResponseModel {
+  nameOk: boolean
+  numberOk: boolean
+  imageOk: boolean
+  xCoordinateOk: boolean
+  yCoordinateOk: boolean
+  success: boolean
+}
+
+export interface InsertStationResponseModel {
+  nameOk: boolean
+  numberOk: boolean
+  locationOk: boolean
+  success: boolean
+}
+
+
+export interface DeleteStationResponseModel {
+  deleted : boolean
+}

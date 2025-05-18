@@ -1,0 +1,1 @@
+docker-compose -p campus_day_app up --build

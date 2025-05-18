@@ -1,13 +1,8 @@
 import {ChangeDetectorRef, Component} from '@angular/core';
 import {CommonModule, NgForOf} from "@angular/common";
-import {HttpClient} from '@angular/common/http';
 import {GetUserDataService} from '../../../../services/get-user-data/get-user-data.service';
 import {UserModel} from '../../../../models/user.model';
-import {StationModel} from '../../../../models/station-model';
 import {UserStationModel} from '../../../../models/user-station-model';
-import {delay} from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
-import {FooterComponent} from '../../footer/footer.component';
 import {GlobalConfigService} from '../../../../services/global-config/global-config.service';
 import {UsbService} from '../../../../services/usb-service/usb.service';
 
@@ -41,7 +36,7 @@ export class StationDisplayBarComponent {
   ngOnInit(): void {
 
     // Benutzerdaten laden
-    this.userDataService.loadUserdata(this.globalConfig.cardNumber).subscribe(
+    this.userDataService.loadUserdata(this.globalConfig.CARD_NUMBER).subscribe(
       user => {
         console.log(user);
 

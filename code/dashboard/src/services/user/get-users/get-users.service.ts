@@ -1,0 +1,45 @@
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {UserListModel, UserModel} from '../../../models/user.model';
+import {GlobalConfigService} from '../../global-config/global-config.service';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class GetUsersService {
+
+  // private apiUrl = 'http://localhost:8080/api/user/all'
+
+  // inject HttpClient instance
+  constructor(
+    private httpClient: HttpClient,
+    private globalConfig: GlobalConfigService,
+  ) {}
+
+  getData(): Observable<UserListModel> {
+    const timestamp = new Date().getTime(); // Cachen von Get request verhindern
+    return this.httpClient.get<UserListModel>(this.globalConfig.serverUrl + 'user/all' +`?t=${timestamp}`);
+  }
+
+  parseUsersFromJson(users: UserModel[]): UserModel[] {
+    return users.map(u => ({
+      username: u.username,
+      cardRfid: u.cardRfid,
+      userStations: u.userStations.map(us => ({
+        id: us.id,
+        completed: us.completed,
+        station: {
+          name: us.station.name,
+          number: us.station.number,
+          location: {
+            image: us.station.location.image,
+            xcoordinate: us.station.location.xcoordinate,
+            ycoordinate: us.station.location.ycoordinate
+          }
+        }
+      }))
+    }));
+  }
+
+}

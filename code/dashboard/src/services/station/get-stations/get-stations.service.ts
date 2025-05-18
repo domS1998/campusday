@@ -1,8 +1,8 @@
 import {Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {StationListModel, StationModel} from '../../models/station-model';
-import {GlobalConfigService} from '../global-config/global-config.service';
+import {StationListModel, StationModel} from '../../../models/station-model';
+import {GlobalConfigService} from '../../global-config/global-config.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ export class GetStationsService {
   ) {}
 
   getData(): Observable<StationListModel> {
-    return this.httpClient.get<StationListModel>( this.globalConfig.SERVER_URL + 'station/all');
+    return this.httpClient.get<StationListModel>( this.globalConfig.serverUrl + 'station/all');
   }
 
   parseStationsFromJson(stations: StationModel[]): StationModel[] {

@@ -1,16 +1,29 @@
 package org.server.api.restcontroller.user;
 
+import jakarta.annotation.PostConstruct;
 import org.server.api.messages.user.AddUserMessage;
 import org.server.api.messages.user.AddUserResponse;
 import org.server.api.restcontroller.AbstractController;
 import org.server.orm.classes.StationDAO;
 import org.server.orm.classes.UserDAO;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
+import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
+import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
+import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicReference;
 
+@Configuration
+@EnableWebSocket
 @RestController
-public class AddUserController extends AbstractController {
+public class AddUserController extends AbstractController implements WebSocketConfigurer {
 
     @PostMapping("user")
     String addUser(@RequestBody AddUserMessage jsonMessage) {
@@ -33,14 +46,6 @@ public class AddUserController extends AbstractController {
         if (userLoaded != null) {
             return new AddUserResponse(false, true, false).toString();
         }
-//        try {
-//            userDAO.loadByRfid(jsonMessage.getCardId());
-//        }
-//        catch (Exception e) {}
-//        if ( userDAO.getUsername() != null ) {
-//            return new AddUserResponse(false, true, false).toString();
-//        }
-
 
         System.out.println(userLoaded);
 
@@ -68,4 +73,53 @@ public class AddUserController extends AbstractController {
         // Antwortnachricht für Erfolg zurückgeben
         return new AddUserResponse(false, false, true).toString();
     }
+
+    private final AtomicReference<WebSocketSession> activeSession = new AtomicReference<>(null);
+
+    @Override
+    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+        registry.addHandler(new SimpleSocketHandler(), "/ws").setAllowedOrigins("*");
+    }
+
+    @PostConstruct
+    public void init() {
+        System.out.println("Waiting for UI to connect...");
+    }
+
+    @PostMapping("user/load")
+    public ResponseEntity<String> sendMessageToWebSocket(@RequestBody String body) {
+        WebSocketSession session = activeSession.get();
+        if (session != null && session.isOpen()) {
+            try {
+                session.sendMessage(new TextMessage(body));
+                return ResponseEntity.ok("Message sent to UI");
+            } catch (IOException e) {
+                return ResponseEntity.internalServerError().body("Failed to send message: " + e.getMessage());
+            }
+        } else {
+            return ResponseEntity.status(503).body("No UI connected");
+        }
+    }
+
+    private class SimpleSocketHandler extends TextWebSocketHandler {
+
+        @Override
+        public void afterConnectionEstablished(WebSocketSession session) {
+            activeSession.set(session);
+            System.out.println("UI connected");
+        }
+
+        @Override
+        public void afterConnectionClosed(WebSocketSession session, org.springframework.web.socket.CloseStatus status) {
+            activeSession.set(null);
+            System.out.println("UI disconnected, restarting WebSocket...");
+            System.out.println("Waiting for UI to connect...");
+        }
+
+        @Override
+        public void handleTransportError(WebSocketSession session, Throwable exception) {
+            System.err.println("WebSocket error: " + exception.getMessage());
+        }
+    }
+
 }

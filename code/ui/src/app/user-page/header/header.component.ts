@@ -1,8 +1,5 @@
 import {Component, Input} from '@angular/core';
 import {StationDisplayBarComponent} from '../main/station-display-bar/station-display-bar.component';
-import {UserModel} from '../../../models/user.model';
-import {HttpClient} from '@angular/common/http';
-import {GetUserDataService} from '../../../services/get-user-data/get-user-data.service';
 import {GlobalConfigService} from '../../../services/global-config/global-config.service';
 
 @Component({

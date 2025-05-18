@@ -10,6 +10,7 @@ RUN npm install
 # Copy the rest of the app and build
 COPY . .
 RUN npm run build --prod
+#RUN npm run build -- --base-href /dashboard/
 
 # Stage 2: Serve with Nginx
 FROM nginx:latest

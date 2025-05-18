@@ -1,24 +1,28 @@
 import { Component } from '@angular/core';
-import {UserListModel, UserModel} from '../../../models/user.model';
-import {Router} from 'express';
-import {GetUsersService} from '../../../services/get-users/get-users.service';
-import {HttpClient} from '@angular/common/http';
-import {NgForOf, NgIf} from '@angular/common';
-import {MatCard, MatCardHeader, MatCardModule, MatCardSubtitle} from '@angular/material/card';
-import {MatList, MatListItem} from '@angular/material/list';
+import {GetUsersService} from '../../../services/user/get-users/get-users.service';
+import {NgIf} from '@angular/common';
+import {MatCardModule} from '@angular/material/card';
 import {MatIcon} from '@angular/material/icon';
-import {MatTable} from '@angular/material/table';
-import { MatTableModule } from '@angular/material/table';
-import { FormsModule } from '@angular/forms';
-import { ViewEncapsulation } from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatFormField, MatInputModule} from '@angular/material/input';
+import {MatTableModule } from '@angular/material/table';
+import {FormsModule } from '@angular/forms';
+import {ViewEncapsulation } from '@angular/core';
+import {MatInputModule} from '@angular/material/input';
 import {AddStationFormComponent} from './add-station-form/add-station-form.component';
 import {MatDialog} from '@angular/material/dialog';
 import {Observable} from 'rxjs';
-import {StationListModel, StationModel} from '../../../models/station-model';
-import {GetStationsService} from '../../../services/get-stations/get-stations.service';
+import {
+  DeleteStationResponseModel,
+  InsertStationResponseModel,
+  StationListModel,
+  StationModel,
+  UpdateStationResponseModel
+} from '../../../models/station-model';
+import {GetStationsService} from '../../../services/station/get-stations/get-stations.service';
 import {UpdateStationFormComponent} from './update-station-form/update-station-form.component';
+import {UpdateUserService} from '../../../services/user/update-user/update-user.service';
+import {UpdateStationService} from '../../../services/station/update-station/update-station.service';
+import {InsertStationService} from '../../../services/station/insert-station/insert-station.service';
+import {DeleteStationService} from '../../../services/station/delete-station/delete-station.service';
 
 
 @Component({
@@ -52,18 +56,15 @@ export class StationlistComponent {
   constructor(
     private getUsersService: GetUsersService,
     private getStationsService: GetStationsService,
-    private httpClient: HttpClient,
+    private updateStationService: UpdateStationService,
+    private insertStationService: InsertStationService,
+    private deleteStationService: DeleteStationService,
     public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
     this.getStationsService.getData().subscribe((response: StationListModel) => {
       this.stations = this.getStationsService.parseStationsFromJson(response.stations);
-      // console.log(response);
-      // console.log(this.users); // Now you have the real UserModel[]
-      // console.log(JSON.stringify(this.users, null, 4)); // Pretty-printed output
-      // this.fillDataSource()
-      // console.log(JSON.stringify(this.dataSource, null, 5)); // Pretty-printed output
       this.isLoaded = true;
     });
   }
@@ -72,11 +73,13 @@ export class StationlistComponent {
   deleteStation(stationName: string): void {
 
     // Station aus Datenbank löschen
-    this.httpClient.delete('http://localhost:8080/api/station/' + stationName, ).subscribe({
+    const responseObs: Observable<DeleteStationResponseModel> = this.deleteStationService.deleteStation(stationName);
+
+    responseObs.subscribe({
 
       // Bei Erfolg
-      next: (updatedUser) => {
-        console.log('Station deleted successfully:', updatedUser);
+      next: (response: DeleteStationResponseModel) => {
+        console.log('response:\n', JSON.stringify(response, null, 5));
 
         // gelöschte Station aus Liste erfüllen
         this.stations = this.stations.filter(item => item.name !== stationName);
@@ -109,20 +112,11 @@ export class StationlistComponent {
       if (stationReturned) {
         console.log("new station received from form dialog: \n" + JSON.stringify(stationReturned, null, 5)); // Pretty-printed output
 
-        // Zu passender Nachricht umwandeln
-        const addStationMessage = {
-          name: stationReturned.name,
-          number: stationReturned.number,
-          imageLabel: stationReturned.location.image,
-          xcoordinate: stationReturned.location.xcoordinate,
-          ycoordinate: stationReturned.location.ycoordinate,
-        };
+        let responseObs: Observable<InsertStationResponseModel> = this.insertStationService.insertStation(stationReturned)
 
-        console.log("new station in AddStationMessage: \n" + JSON.stringify(addStationMessage, null, 5)); // Pretty-printed output
-
-        this.httpClient.post('http://localhost:8080/api/station', addStationMessage).subscribe({
-          next: (postedStation) => {
-            console.log('Station added successfully:', postedStation);
+        responseObs.subscribe({
+          next:  (response: InsertStationResponseModel) => {
+            console.log('response:\n', JSON.stringify(response, null, 5));
 
             // Station laden und in Liste einfügen
             this.isLoaded = false;
@@ -156,20 +150,14 @@ export class StationlistComponent {
       if (stationReturned) {
         console.log("updated station received from form dialog: \n" + JSON.stringify(stationReturned, null, 5)); // Pretty-printed output
 
-        // Zu passender Nachricht umwandeln
-        const updateStationMessage = {
-          name: stationReturned.name,
-          number: stationReturned.number,
-          imageLabel: stationReturned.location.image,
-          xcoordinate: stationReturned.location.xcoordinate,
-          ycoordinate: stationReturned.location.ycoordinate,
-        };
+        // Station updaten in der Datenbank
+        let stationUpdatedObs: Observable<UpdateStationResponseModel> = this.updateStationService.updateStation(stationReturned)
 
-        console.log("updated station in AddStationMessage: \n" + JSON.stringify(updateStationMessage, null, 5)); // Pretty-printed output
-
-        this.httpClient.put('http://localhost:8080/api/station', updateStationMessage).subscribe({
-          next: (postedStation) => {
-            console.log('Station updated successfully:', postedStation);
+        // Bei Antwort
+        stationUpdatedObs.subscribe({
+          // bei Erfolg
+          next: (response: UpdateStationResponseModel) => {
+            console.log('response:\n', JSON.stringify(response, null, 5));
 
             // Station laden und in Liste einfügen
             this.isLoaded = false;
@@ -186,6 +174,7 @@ export class StationlistComponent {
             console.log('PUT request completed.');
           }
         });
+
       }
     });
   }

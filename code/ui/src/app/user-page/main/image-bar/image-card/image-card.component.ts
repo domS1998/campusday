@@ -40,7 +40,7 @@ export class ImageCardComponent {
   // Wenn Komponente initialisiert wird, Benuzterdaten von API laden
   ngOnInit(): void {
     // Benutzerdaten laden und zuweisen
-    this.userDataService.loadUserdata(this.globalConfig.cardNumber).subscribe(
+    this.userDataService.loadUserdata(this.globalConfig.CARD_NUMBER).subscribe(
       user => {
         this.user = user;
         this.userStations = this.user.userStations

@@ -1,13 +1,8 @@
 import { Component } from '@angular/core';
 import {CommonModule, NgForOf} from "@angular/common";
-import {HttpClient} from '@angular/common/http';
 import {GetUserDataService} from '../../../../services/get-user-data/get-user-data.service';
 import {UserModel} from '../../../../models/user.model';
-import {StationModel} from '../../../../models/station-model';
 import {UserStationModel} from '../../../../models/user-station-model';
-import {delay} from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
-import {FooterComponent} from '../../footer/footer.component';
 import {GlobalConfigService} from '../../../../services/global-config/global-config.service';
 
 @Component({
@@ -30,8 +25,8 @@ export class StationDisplayBarComponent {
   // Track loading state
   isLoaded = false;
 
-  constructor( private userDataService: GetUserDataService,
-               private globalConfig: GlobalConfigService,
+  constructor(private userDataService: GetUserDataService,
+              protected globalConfig: GlobalConfigService,
   ){}
 
   // Initialisierung der Komponente
