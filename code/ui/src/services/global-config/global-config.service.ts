@@ -6,7 +6,8 @@ import {StationModel} from '../../models/station-model';
 export class GlobalConfigService {
   APP_VERSION = '1.0.0';
   PROTOCOL    = 'http'
-  SERVER_HOST = 'localhost';
+  // SERVER_HOST = 'localhost';
+  SERVER_HOST = 'campusdayapp.germanywestcentral.cloudapp.azure.com'
   SERVER_PORT = '8080';
   API_PREFIX  = 'api';
   SERVER_URL  = this.PROTOCOL+'://'+this.SERVER_HOST+':'+this.SERVER_PORT+'/'+this.API_PREFIX+'/'
