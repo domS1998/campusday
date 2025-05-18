@@ -8,6 +8,8 @@ import { LandingPageComponent } from './landing-page/landing-page.component';
 import { UserPageComponent } from './user-page/user-page.component';
 import { CommonModule } from '@angular/common';
 import { GlobalConfigService } from '../services/global-config/global-config.service';
+import {DropdownPopupComponent} from './dropdown-popup/dropdown-popup.component';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   standalone: true,
@@ -21,6 +23,7 @@ import { GlobalConfigService } from '../services/global-config/global-config.ser
     NgSwitch,
     LandingPageComponent,
     UserPageComponent,
+    DropdownPopupComponent,
     // HeaderComponent,
   ],
   providers: [
@@ -36,9 +39,14 @@ export class AppComponent {
     private userDataService: GetUserDataService,
     private usbService: UsbService,
     private globalConfig: GlobalConfigService,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit() {
+
+    // Readernummer festlegen
+    this.openAddStationDialog()
+
     // Seite mit gegebener Kartennummer laden,
     //  wenn über USB eine Nachricht emfangen wird
     this.usbService.onMessage((msg) => {
@@ -83,6 +91,23 @@ export class AppComponent {
       console.log('Timer reset');
     }
   }
+
+
+  openAddStationDialog(): void {
+
+    // let readerNumber = -1
+
+    const dialogRef = this.dialog.open(DropdownPopupComponent, {
+      width: '20vw',
+      // data: { readerNumber }
+    });
+
+    dialogRef.afterClosed().subscribe(readerNumberReturned => {
+      this.globalConfig.CARD_NUMBER = readerNumberReturned;
+    });
+  }
+
+
 }
 
 export enum PageType {

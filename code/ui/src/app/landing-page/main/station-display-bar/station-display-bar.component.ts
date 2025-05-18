@@ -33,9 +33,9 @@ export class StationDisplayBarComponent {
   ngOnInit(): void {
 
     // Benutzerdaten laden
-    // this.userDataService.loadUserdata(this.globalConfig.cardNumber).subscribe(
+    // this.userDataService.loadUserdata(this.globalConfig.CARD_NUMBER).subscribe(
     //   user => {
-    //     console.log(user);
+        // console.log(user);
     //
     //     // Falls Benutzer nicht existiert
     //     if (user.username == null) {
@@ -45,11 +45,15 @@ export class StationDisplayBarComponent {
     //     this.userStations = this.user.userStations
     //
     //     // Stationen sortieren vor Anzeige
-    //     this.sortStationsByNumber()
+
+        // this.userStations = this.globalConfig.USER.userStations
+        // this.sortStationsByNumber()
+        // this.globalConfig.USER.userStations = this.userStations
+
     //
     //     // Observable als fertig geladen markieren
         this.isLoaded = true;
-    //   }
+      // }
     // );
   }
 

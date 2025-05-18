@@ -1,0 +1,13 @@
+<div class="popup-backdrop" *ngIf="isVisible">
+  <div class="popup-box">
+    <form [formGroup]="form">
+      <label for="dropdown">Nummer des Kartenlesers:</label>
+      <select id="dropdown" formControlName="choice">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+      </select>
+      <button type="button" (click)="closePopup()">Close</button>
+    </form>
+  </div>
+</div>

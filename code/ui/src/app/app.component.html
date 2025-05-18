@@ -4,10 +4,7 @@
 <!--    <app-header></app-header>-->
 <!--  </header>-->
 
-<!--  <main *ngIf="this.pageType == PageType.LANDING_PAGE" class = "flex-container">-->
-<!--    <app-image-bar></app-image-bar>-->
-<!--    <app-station-display-bar></app-station-display-bar>-->
-<!--  </main>-->
+
 
   <div [ngSwitch]="this.pageType" class = "flex-container">
     <div *ngSwitchCase="PageType.LANDING_PAGE">
