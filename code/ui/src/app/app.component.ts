@@ -23,7 +23,6 @@ import {MatDialog} from '@angular/material/dialog';
     NgSwitch,
     LandingPageComponent,
     UserPageComponent,
-    DropdownPopupComponent,
     // HeaderComponent,
   ],
   providers: [
@@ -56,7 +55,7 @@ export class AppComponent {
         const message = JSON.parse(msg);
         this.globalConfig.CARD_NUMBER = message.cardNumber;
 
-        if (this.globalConfig.READER_NUMBER == message.readerNumber;) {
+        if (this.globalConfig.READER_NUMBER == message.readerNumber) {
           // Benutzer mit Kartennummer laden und zu globaler Config hinzufügen
           this.userDataService.loadUserdata(this.globalConfig.CARD_NUMBER).subscribe(
             userLoaded => {
